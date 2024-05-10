@@ -1,0 +1,129 @@
+<!-- Header-->
+<app-header id="top"></app-header>
+
+<!-- Page content-->
+<div class="container pt-5 pb-lg-4 mt-5 mb-sm-2">
+  <!-- Breadcrumb-->
+  <app-breadcrumbs [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+  <!-- Page content-->
+  <div class="row">
+    <!-- Sidebar-->
+    <aside class="col-lg-4 col-md-5 pe-xl-4 mb-5">
+      <!-- Account nav-->
+      <div class="card card-body border-0 shadow-sm pb-1 me-lg-1">
+        <div class="d-flex d-md-block d-lg-flex align-items-start pt-lg-2 mb-4">
+          <div class="pt-md-2 pt-lg-0 ps-3 ps-md-0 ps-lg-3">
+            <h2 class="fs-lg mb-0">{{tokenStorage.getNom()}}</h2><span class="star-rating"></span>
+            <ul class="list-unstyled fs-sm mt-3 mb-0">
+              <li><a class="nav-link fw-normal p-0"><i class="fi-phone opacity-60 me-2"></i>(216) {{tokenStorage.getUser()['numTel']}}</a></li>
+              <li><a class="nav-link fw-normal p-0"><i class="fi-mail opacity-60 me-2"></i>{{tokenStorage.getUser()['email']}}</a></li>
+            </ul>
+          </div>
+        </div><a class="btn btn-primary btn-lg w-100 mb-3" routerLink="/vendor/add-property"><i class="fi-plus me-2"></i>Ajouter une annonce</a><a class="btn btn-outline-secondary d-block d-md-none w-100 mb-3" href="javascript:void(0);" data-bs-toggle="collapse" (click)="SideBarMenu()"><i class="fi-align-justify me-2"></i>Menu</a>
+        <div class="collapse d-md-block mt-3" id="account-nav">
+          <div class="card-nav">
+            <a class="card-nav-link active" routerLink="/account/info"><i class="fi-user opacity-60 me-2"></i>Informations personnelles</a>
+            <div *ngIf="tokenStorage.getUser()['roles'] ==='USER' then mesAnnonces"></div>
+            <ng-template #mesAnnonces>
+            <a class="card-nav-link" routerLink="/account/properties"><i class="fi-home opacity-60 me-2"></i>Mes annonces</a>
+            </ng-template>
+            <a class="card-nav-link" routerLink="" (click)="deconnexion()"><i class="fi-logout opacity-60 me-2"></i>Se déconnecter</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <!-- Content-->
+    <div class="col-lg-8 col-md-7 mb-5">
+      <h1 class="h2">Informations personnelles</h1>
+      <div class="progress mb-4" style="height: .25rem;">
+        <div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+
+
+
+      <div class="border rounded-3 p-3 mb-4 border-accordion" id="personal-info">
+        <!-- Name-->
+        <ngb-accordion #acc="ngbAccordion" [closeOthers]="true">
+          <ngb-panel id="static-1">
+              <ng-template ngbPanelTitle class="accordion-header">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="pe-2">
+                    <label class="form-label fw-bold">Nom et prénom</label>
+                    <div id="name-value">{{tokenStorage.getNom()}}</div>
+                  </div>
+                  <div class="me-n3" placement="top" ngbTooltip="Modifier"><a class="nav-link py-0" href="javascript:void(0);" data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                </div>
+              </ng-template>
+              <ng-template ngbPanelContent>
+                  <input id="NewNom" class="form-control mt-3" type="text" data-bs-binded-element="#name-value" data-bs-unset-value="Not specified" placeholder="{{tokenStorage.getNom()}}">
+              </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+
+        <!-- Email-->
+        <ngb-accordion #acc="ngbAccordion" [closeOthers]="true">
+          <ngb-panel id="static-2">
+              <ng-template ngbPanelTitle class="accordion-header">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="pe-2">
+                    <label class="form-label fw-bold">Email</label>
+                    <div id="email-value">{{tokenStorage.getUser()['email']}}</div>
+                  </div>
+                  <div class="me-n3" placement="top" ngbTooltip="Modifier"><a class="nav-link py-0" href="javascript:void(0);" data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                </div>
+              </ng-template>
+              <ng-template ngbPanelContent>
+                <input id="NewEmail" class="form-control mt-3" type="email" data-bs-binded-element="#email-value" data-bs-unset-value="Not specified" placeholder="{{tokenStorage.getUser()['email']}}">
+              </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+
+        <!-- Phone number-->
+        <ngb-accordion #acc="ngbAccordion" [closeOthers]="true">
+          <ngb-panel id="static-3">
+              <ng-template ngbPanelTitle class="accordion-header">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="pe-2">
+                    <label class="form-label fw-bold">Numéro de téléphone</label>
+                    <div id="phone-value">{{tokenStorage.getUser()['numTel']}}</div>
+                  </div>
+                  <div class="me-n3" placement="top" ngbTooltip="Modifier"><a class="nav-link py-0" href="javascript:void(0);" data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                </div>
+              </ng-template>
+              <ng-template ngbPanelContent>
+                <input id="NewNumTel" class="form-control mt-3" type="text" data-bs-binded-element="#phone-value" data-bs-unset-value="Not specified" placeholder="{{tokenStorage.getUser()['numTel']}}">
+              </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+
+        <!-- Address-->
+        <ngb-accordion #acc="ngbAccordion" [closeOthers]="true">
+          <ngb-panel id="static-5">
+              <ng-template ngbPanelTitle class="accordion-header">
+                <div class="d-flex align-items-center justify-content-between">
+                  <div class="pe-2">
+                    <label class="form-label fw-bold">Adresse</label>
+                    <div id="address-value">{{tokenStorage.getUser()['adresse']}}</div>
+                  </div>
+                  <div class="me-n3" placement="top" ngbTooltip="Modifier"><a class="nav-link py-0" href="javascript:void(0);" data-bs-toggle="collapse"><i class="fi-edit"></i></a></div>
+                </div>
+              </ng-template>
+              <ng-template ngbPanelContent>
+                <input id="NewAdresse" class="form-control mt-3" type="text" data-bs-binded-element="#address-value" data-bs-unset-value="Not specified" placeholder="{{tokenStorage.getUser()['adresse']}}">
+              </ng-template>
+          </ngb-panel>
+        </ngb-accordion>
+
+      <div class="collapse" id="showMoreSocials" #firstcollapse="ngbCollapse" [(ngbCollapse)]="firstColleaps"></div>
+      <div class="d-flex align-items-center justify-content-between border-top mt-4 pt-4 pb-1">
+        <button class="btn btn-primary px-3 px-sm-4" type="button" (click)="modifierUtilisateur()">Enregistrer les changements</button>
+        <button class="btn btn-link btn-sm px-0" type="button" (click)="deleteUtilisateur(tokenStorage.getUser()['idUtilisateur'])"><i class="fi-trash me-2"></i>Supprimer votre compte</button>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+  <!-- Footer-->
+  <app-footer></app-footer>

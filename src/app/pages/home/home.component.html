@@ -1,0 +1,704 @@
+<!-- Header-->
+<app-header id="top"></app-header>
+
+<!-- Hero-->
+<section class="container pt-5 my-5 pb-lg-4">
+  <div class="row pt-0 pt-md-2 pt-lg-0">
+    <div class="col-xl-7 col-lg-6 col-md-5 order-md-2 mb-4 mb-lg-3"><img src="assets/img/real-estate/landing.png" alt="Hero image"></div>
+    <div class="col-xl-5 col-lg-6 col-md-7 order-md-1 pt-xl-5 pe-lg-0 mb-3 text-md-start text-center">
+      <img src="assets/img/logo/wheel.png" alt="Hero image" width="180" style="float: right;margin-right: 50%;">
+      <h1 class="display-4 mt-lg-5 mb-md-4 mb-3 pt-md-4 pb-lg-2">WheelWorld <br></h1><h5>Vente et location des véhicules automobiles</h5>
+      <p class="position-relative lead me-lg-n5">
+        WheelWorld vous offre un service complet <br>et professionnel de vente, d'achat, et de location de <br>véhicules automobiles, couvrant une large gamme de marques et de modèles pour répondre à tous vos besoins <br>de mobilité.
+    </div>
+  </div>
+</section>
+
+<!-- Services-->
+<div *ngIf="tokenStorage.isLoggedIn() === true then ajouterAnnonce"></div>
+<ng-template #ajouterAnnonce>
+<section class="container mb-5 mt-n3 mt-lg-0">
+  <swiper [config]="service" class="pagination-hide">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let data of servicesData">
+        <div class="col">
+          <div class="card card-hover border-0 h-100 pb-2 pb-sm-3 px-sm-3 text-center"><img class="d-block mx-auto my-3"
+              src="{{data.image}}" width="256" alt="Illustration">
+            <div class="card-body">
+              <h2 class="h4 card-title">{{data.title}}</h2>
+              <p class="card-text fs-sm">{{data.content}}</p>
+            </div>
+            <div class="card-footer pt-0 border-0"><a class="btn btn-outline-primary stretched-link"
+                routerLink="{{data.link}}">{{data.btn}}</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </swiper>
+</section>
+</ng-template>
+
+<div *ngIf="tokenStorage.isLoggedIn() === false then ajouterAnnonceVisiteur"></div>
+<ng-template #ajouterAnnonceVisiteur>
+  <section class="container mb-5 mt-n3 mt-lg-0">
+    <swiper [config]="service" class="pagination-hide">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" *ngFor="let data of servicesDataVst">
+          <div class="col">
+            <div class="card card-hover border-0 h-100 pb-2 pb-sm-3 px-sm-3 text-center"><img class="d-block mx-auto my-3"
+                                                                                              src="{{data.image}}" width="256" alt="Illustration">
+              <div class="card-body">
+                <h2 class="h4 card-title">{{data.title}}</h2>
+                <p class="card-text fs-sm">{{data.content}}</p>
+              </div>
+              <div class="card-footer pt-0 border-0"><a class="btn btn-outline-primary stretched-link"
+                                                        routerLink="{{data.link}}">{{data.btn}}</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </swiper>
+  </section>
+</ng-template>
+
+<!-- Top offers (carousel)-->
+<section class="container mb-5 pb-md-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 class="h3 mb-0">Les annonces</h2><a class="btn btn-link fw-normal p-0" routerLink="/catalog/sale">Toutes les annonces<i
+        class="fi-arrow-long-right ms-2"></i></a>
+  </div>
+  <div class="swiper default-swiper rounded">
+    <swiper [config]="config" class="mb-5">
+      <div class="swiper-wrapper" id="idAnnonce">
+        <div class="col-sm-6 col-xl-4" *ngFor="let venteAnnonces of annonces ">
+          <div class="card shadow-sm card-hover border-0 h-100">
+            <div class="tns-carousel-wrapper card-img-top card-img-hover"><a class="img-overlay" [routerLink]="'/catalog/single-v2/' + venteAnnonces.idAnnonce"></a>
+
+<!--              <div class="content-overlay end-0 top-0 pt-3 pe-3">-->
+<!--                <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button"-->
+<!--                        placement="left" ngbTooltip="Add to Wishlist"><i class="fi-heart"></i></button>-->
+<!--              </div> -->
+
+              <div class="swiper-wrapper">
+                <div class="swiper-slide" >
+                  <img [src]="images[annonces.indexOf(venteAnnonces)]" alt="Image" class="h-100">
+                </div>
+              </div>
+            </div>
+            <div class="card-body position-relative pb-3">
+              <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">{{venteAnnonces.categorie}}</h4>
+              <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link"
+                                             [routerLink]="'/catalog/single-v2/' + venteAnnonces.idAnnonce">{{venteAnnonces.titre}}</a></h3>
+              <p class="mb-2 fs-sm text-muted">
+                <i class="fi-map-pin ms-1 mt-n1 fs-lg text-muted"></i>
+                {{venteAnnonces.adresse}},{{venteAnnonces.ville}},{{venteAnnonces.region}}</p>
+              <div class="fw-bold"><i class="fi-house-chosen mt-n1 me-2 lead align-middle opacity-70"></i>{{venteAnnonces.type_Annonce}}</div>
+
+              <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>{{venteAnnonces.prix}} TND</div>
+              <div class="fw-bold"><i class="fi-minus-square mt-n1 me-2 lead align-middle opacity-70"></i>{{venteAnnonces.surface}} m²</div>
+            </div>
+
+            <div *ngIf="venteAnnonces.type_Annonce === 'Appartement' then AutreAppartement"></div>
+            <ng-template #AutreAppartement>
+              <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrChambresAppartement}}<i
+                  class="fi-bed ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrSalleDeBainAppartement}}<i
+                  class="fi-bath ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+              </div>
+            </ng-template>
+
+            <div *ngIf="venteAnnonces.type_Annonce === 'Maison' then AutreMaison"></div>
+            <ng-template #AutreMaison>
+              <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrChambresMaison}}<i
+                  class="fi-bed ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrSalleDeBainMaison}}
+                  <i class="fi-bath ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+              </div>
+            </ng-template>
+
+            <div *ngIf="venteAnnonces.type_Annonce === 'Ferme' then AutreFerme"></div>
+            <ng-template #AutreFerme>
+              <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.maisonFerme}}<i
+                  class="fi-house-chosen ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+              </div>
+            </ng-template>
+
+            <div *ngIf="venteAnnonces.type_Annonce === 'Immeuble' then AutreImmeuble"></div>
+            <ng-template #AutreImmeuble>
+              <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrEtagesImmeuble}}<i
+                  class="fi-building ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrPiecesImmeuble}}<i
+                  class="fi-real-estate-house ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+              </div>
+            </ng-template>
+
+            <div *ngIf="venteAnnonces.type_Annonce === 'Local' then AutreLocal"></div>
+            <ng-template #AutreLocal>
+              <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <i class="fi-ticket ms-1 mt-n1 fs-lg text-muted"></i>
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.typeLocal}}
+                </span>
+              </div>
+            </ng-template>
+
+            <div *ngIf="venteAnnonces.type_Annonce === 'Terrain' then AutreTerrain"></div>
+            <ng-template #AutreTerrain>
+              <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.typeTerrain}}
+                </span>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </swiper>
+    <div class="swiper-pagination mt-5"></div>
+  </div>
+</section>
+
+
+<div *ngIf="tokenStorage.isLoggedIn() === true then prediction "></div>
+<ng-template #prediction>
+<!-- Property cost calculator-->
+<section class="container mb-5 pb-2 pb-lg-4" id="prediction">
+  <div class="row align-items-center">
+    <div class="col-md-5"><img class="d-block mx-md-0 mx-auto mb-md-0 mb-4"
+        src="assets/img/real-estate/illustrations/calculator.svg" width="416" alt="Illustration"></div>
+    <div class="col-xxl-6 col-md-7 text-md-start text-center">
+      <h2>Сalculer le prix de votre bien</h2>
+      <p class="pb-3 fs-lg">RhetIA vous propose une procédure qui permet de déterminer la valeur moyenne de marché d'un bien immobilier (appartement, maison ou villa).</p>
+       <p class="pb-3 fs-lg"> Calculez le coût de votre bien avec notre nouveau service de calcul.</p><a class="btn btn-lg btn-primary" href="javascript:void(0);" (click)="openModal(content)"
+        data-bs-toggle="modal"><i class="fi-calculator me-2"></i>Calculer</a>
+    </div>
+  </div>
+</section>
+</ng-template>
+<!-- Cities (carousel)-->
+
+
+<!-- Property cost calculator modal-->
+<ng-template #content role="document" let-modal>
+  <div class="modal-header d-block position-relative border-0 px-sm-5 px-4">
+    <h3 class="h4 modal-title mt-4 text-center">Evaluez la valeur de votre Appartement, Maison ou Villa</h3>
+    <button class="btn-close position-absolute top-0 end-0 mt-3 me-3" type="button" data-bs-dismiss="modal"
+      aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body px-sm-5 px-4" id="calculForm">
+    <form class="needs-validation" novalidate (ngSubmit)="onCalcul()">
+      <div class="mb-3">
+        <label class="form-label" for="ap-type">Type du bien <span class="text-danger">*</span></label>
+        <select name="type_Annonce" class="form-select" id="ap-type" required #typeDuBien>
+          <option value="" disabled selected>Choisir le type du bien</option>
+          <option value="Appartement">Appartement</option>
+          <option value="Maison">Maison,Villa</option>
+        </select>
+      </div>
+      <div class="pt-2 mb-3">
+        <label class="form-label fw-bold mb-2" for="property-area">Adresse</label>
+        <select name="region" class="form-select" id="property-district" required>
+          <option value="" ></option>
+          <option value="Cite AFH a Oued Ellil" >Cite AFH a Oued Ellil</option>
+          <option value="Oued El Marj a Bizerte Nord" >Oued El Marj a Bizerte Nord</option>
+          <option value="El Menzah 7 a Ariana Ville" >El Menzah 7 a Ariana Ville</option>
+          <option value="Cite Chaker a Raoued" >Cite Chaker a Raoued</option>
+          <option value="Chotrana 1 a La Soukra" >Chotrana 1 a La Soukra</option>
+          <option value="Mahdia" >Mahdia</option>
+          <option value="Cite Militaire a El Omrane" >Cite Militaire a El Omrane</option>
+          <option value="Rejiche" >Rejiche</option>
+          <option value="Le Kram" >Le Kram</option>
+          <option value="Ben Arous Sud a Ben Arous" >Ben Arous Sud a Ben Arous</option>
+          <option value="El Menzah 9 a El Menzah" >El Menzah 9 a El Menzah</option>
+          <option value="Chotrana 3 a La Soukra" >Chotrana 3 a La Soukra</option>
+          <option value="El Manar 3 a El Menzah" >El Manar 3 a El Menzah</option>
+          <option value="Ettahrir 2 a Ettahrir" >Ettahrir 2 a Ettahrir</option>
+          <option value="El Manar 1 a El Menzah" >El Manar 1 a El Menzah</option>
+          <option value="Ettahrir 1 a Ettahrir" >Ettahrir 1 a Ettahrir</option>
+          <option value="El Bassatine a Mornaguia" >El Bassatine a Mornaguia</option>
+          <option value="Nouvelle Medina a Nouvelle Medina" >Nouvelle Medina a Nouvelle Medina</option>
+          <option value="Bab Alioua a Tunis" >Bab Alioua a Tunis</option>
+          <option value="Mahboubine a Midoun" >Mahboubine a Midoun</option>
+          <option value="El Ouardia a El Ouardia" >El Ouardia a El Ouardia</option>
+          <option value="Taieb Mhiri a Tunis" >Taieb Mhiri a Tunis</option>
+          <option value="Kouenjel a Mornag" >Kouenjel a Mornag</option>
+          <option value="Rades Meliane a Rades" >Rades Meliane a Rades</option>
+          <option value="El Haouaria" >El Haouaria</option>
+          <option value="Chebba" >Chebba</option>
+          <option value="Sondage a Mornag" >Sondage a Mornag</option>
+          <option value="La Goulette a La Goulette" >La Goulette a La Goulette</option>
+          <option value="Ain Zaghouan Nord a La Marsa" >Ain Zaghouan Nord a La Marsa</option>
+          <option value="El Menzah 6 a Ariana Ville" >El Menzah 6 a Ariana Ville</option>
+          <option value="Charguia 2 a La Soukra" >Charguia 2 a La Soukra</option>
+          <option value="Avenue Khezama" >Avenue Khezama</option>
+          <option value="El Menzah 5 a Ariana Ville" >El Menzah 5 a Ariana Ville</option>
+          <option value="El Hessiene a Raoued" >El Hessiene a Raoued</option>
+          <option value="Menzel Bouzelfa" >Menzel Bouzelfa</option>
+          <option value="Ezzahrouni a El Hrairia" >Ezzahrouni a El Hrairia</option>
+          <option value="Sousse Jaouhara" >Sousse Jaouhara</option>
+          <option value="Bizerte" >Bizerte</option>
+          <option value="Republique a Tunis" >Republique a Tunis</option>
+          <option value="Ariana a Ariana Ville" >Ariana a Ariana Ville</option>
+          <option value="Carthage" >Carthage</option>
+          <option value="Yasmine Hammamet a Hammamet" >Yasmine Hammamet a Hammamet</option>
+          <option value="Centre Urbain Nord a Cite El Khadra" >Centre Urbain Nord a Cite El Khadra</option>
+          <option value="Sijoumi" >Sijoumi</option>
+          <option value="Ezzouhour 5 a El Hrairia" >Ezzouhour 5 a El Hrairia</option>
+          <option value="El Mourouj 5 a El Mourouj" >El Mourouj 5 a El Mourouj</option>
+          <option value="Dar Fadhal a La Soukra" >Dar Fadhal a La Soukra</option>
+          <option value="Cite Alyssa 1 a El Mourouj" >Cite Alyssa 1 a El Mourouj</option>
+          <option value="Medenine" >Medenine</option>
+          <option value="Mnihla" >Mnihla</option>
+          <option value="Sahloul a Sousse Jaouhara" >Sahloul a Sousse Jaouhara</option>
+          <option value="Kasserine Nord" >Kasserine Nord</option>
+          <option value="El Ain" >El Ain</option>
+          <option value="Cite Mohamed Ali a Rades" >Cite Mohamed Ali a Rades</option>
+          <option value="El Fendria a Mornag" >El Fendria a Mornag</option>
+          <option value="Cite du Jardin 1 a Sfax Ville" >Cite du Jardin 1 a Sfax Ville</option>
+          <option value="Ben Arous a Ben Arous" >Ben Arous a Ben Arous</option>
+          <option value="Mohamadia a Mohamadia" >Mohamadia a Mohamadia</option>
+          <option value="Borj Baccouche a Ariana Ville" >Borj Baccouche a Ariana Ville</option>
+          <option value="Hergla" >Hergla</option>
+          <option value="Charguia 1 a La Soukra" >Charguia 1 a La Soukra</option>
+          <option value="Zarat a Mareth" >Zarat a Mareth</option>
+          <option value="Sousse Riadh a Sousse Riadh" >Sousse Riadh a Sousse Riadh</option>
+          <option value="Ain Zaghouan Sud a La Marsa" >Ain Zaghouan Sud a La Marsa</option>
+          <option value="Korba" >Korba</option>
+          <option value="Zone Touristique a Mahdia Ville" >Zone Touristique a Mahdia Ville</option>
+          <option value="Monastir Ville" >Monastir Ville</option>
+          <option value="Les Berges Du Lac 2 a La Marsa" >Les Berges Du Lac 2 a La Marsa</option>
+          <option value="Zone Industrielle El Meghira a Fouchana" >Zone Industrielle El Meghira a Fouchana</option>
+          <option value="Chatt Meriem a Sousse Ville" >Chatt Meriem a Sousse Ville</option>
+          <option value="Hammamet" >Hammamet</option>
+          <option value="Kairouan Nord" >Kairouan Nord</option>
+          <option value="Bizerte Centre Ville a Bizerte Nord" >Bizerte Centre Ville a Bizerte Nord</option>
+          <option value="Denden a La Manouba" >Denden a La Manouba</option>
+          <option value="Le Kef Ouest" >Le Kef Ouest</option>
+          <option value="Sakiet Eddaier a Sakiet Eddaier" >Sakiet Eddaier a Sakiet Eddaier</option>
+          <option value="Cite Olympique a Cite El Khadra" >Cite Olympique a Cite El Khadra</option>
+          <option value="Bir Amir" >Bir Amir</option>
+          <option value="Zone touristique a Houmt Souk" >Zone touristique a Houmt Souk</option>
+          <option value="La Goulette Casino a La Goulette" >La Goulette Casino a La Goulette</option>
+          <option value="Sousse Khezama a Sousse Ville" >Sousse Khezama a Sousse Ville</option>
+          <option value="Sfax Sud a Sfax Sud" >Sfax Sud a Sfax Sud</option>
+          <option value="Kondar" >Kondar</option>
+          <option value="Kheireddine Pacha a Cite El Khadra" >Kheireddine Pacha a Cite El Khadra</option>
+          <option value="Charguia a Cite El Khadra" >Charguia a Cite El Khadra</option>
+          <option value="Dar Chaabane" >Dar Chaabane</option>
+          <option value="Cite El Intilaka a El Omrane Superieur" >Cite El Intilaka a El Omrane Superieur</option>
+          <option value="Cite Erriadh a La Marsa" >Cite Erriadh a La Marsa</option>
+          <option value="Kalaa Kebira" >Kalaa Kebira</option>
+          <option value="Houmt Souk a Houmt Souk" >Houmt Souk a Houmt Souk</option>
+          <option value="Salakta" >Salakta</option>
+          <option value="Cite Hached" >Cite Hached</option>
+          <option value="Skanes a Monastir Ville" >Skanes a Monastir Ville</option>
+          <option value="Chott Meriem a Akouda" >Chott Meriem a Akouda</option>
+          <option value="Mateur" >Mateur</option>
+          <option value="El Yasminette a Nouvelle Medina" >El Yasminette a Nouvelle Medina</option>
+          <option value="Cite Du Stade a La Marsa" >Cite Du Stade a La Marsa</option>
+          <option value="Tabarka Ville a Tabarka" >Tabarka Ville a Tabarka</option>
+          <option value="Bellevue a El Ouardia" >Bellevue a El Ouardia</option>
+          <option value="Kalaat Landalous a Kalaat Landalous" >Kalaat Landalous a Kalaat Landalous</option>
+          <option value="Midoun" >Midoun</option>
+          <option value="Raoued" >Raoued</option>
+          <option value="La Goulette Port a La Goulette" >La Goulette Port a La Goulette</option>
+          <option value="Route de Tunis a Sfax Ville" >Route de Tunis a Sfax Ville</option>
+          <option value="Sousse Riadh a Sousse Ville" >Sousse Riadh a Sousse Ville</option>
+          <option value="El Aouina" >El Aouina</option>
+          <option value="Montfleury a Tunis" >Montfleury a Tunis</option>
+          <option value="Riadh al Andalous a Ariana Ville" >Riadh al Andalous a Ariana Ville</option>
+          <option value="Cite El Moez a La Marsa" >Cite El Moez a La Marsa</option>
+          <option value="Cite El Khadra a Cite El Khadra" >Cite El Khadra a Cite El Khadra</option>
+          <option value="Sidi Jmour a Houmt Souk" >Sidi Jmour a Houmt Souk</option>
+          <option value="Sidi Mansour a Tunis" >Sidi Mansour a Tunis</option>
+          <option value="El Mida" >El Mida</option>
+          <option value="Jebeniana" >Jebeniana</option>
+          <option value="Mezraya" >Mezraya</option>
+          <option value="Houmt Souk a Djerba" >Houmt Souk a Djerba</option>
+          <option value="Sidi Salem a Houmt Souk" >Sidi Salem a Houmt Souk</option>
+          <option value="Monastir Ville a Monastir Ville" >Monastir Ville a Monastir Ville</option>
+          <option value="Rades Medina a Rades" >Rades Medina a Rades</option>
+          <option value="Khelidia a Mornag" >Khelidia a Mornag</option>
+          <option value="Jaafar a Raoued" >Jaafar a Raoued</option>
+          <option value="La Soukra a La Soukra" >La Soukra a La Soukra</option>
+          <option value="Route Teniour a Sfax Ville" >Route Teniour a Sfax Ville</option>
+          <option value="El Kantaoui a Hammam Sousse" >El Kantaoui a Hammam Sousse</option>
+          <option value="Agareb a Agareb" >Agareb a Agareb</option>
+          <option value="Bizerte Sud" >Bizerte Sud</option>
+          <option value="Sahloul a Sousse Ville" >Sahloul a Sousse Ville</option>
+          <option value="Midoun zone touristique" >Midoun zone touristique</option>
+          <option value="Ras Tabia a El Omrane" >Ras Tabia a El Omrane</option>
+          <option value="Hammamet a Hammamet" >Hammamet a Hammamet</option>
+          <option value="Bou Mhel a Boumhel Bassatine" >Bou Mhel a Boumhel Bassatine</option>
+          <option value="Sidi Frej a La Soukra" >Sidi Frej a La Soukra</option>
+          <option value="Sidi Salem a Bizerte Nord" >Sidi Salem a Bizerte Nord</option>
+          <option value="Hammam Ghezeze" >Hammam Ghezeze</option>
+          <option value="Carthage Byrsa a Carthage" >Carthage Byrsa a Carthage</option>
+          <option value="Oued Sebai a El Omrane" >Oued Sebai a El Omrane</option>
+          <option value="Bou Kornine a Hammam Lif" >Bou Kornine a Hammam Lif</option>
+          <option value="Sousse Ville a Sousse Ville" >Sousse Ville a Sousse Ville</option>
+          <option value="Rades Plage a Rades" >Rades Plage a Rades</option>
+          <option value="Cite el Ghazela a Raoued" >Cite el Ghazela a Raoued</option>
+          <option value="Borj Louzir a La Soukra" >Borj Louzir a La Soukra</option>
+          <option value="Mornag a Mornag" >Mornag a Mornag</option>
+          <option value="Sidi Rezig a Megrine" >Sidi Rezig a Megrine</option>
+          <option value="Cite des Juges a Raoued" >Cite des Juges a Raoued</option>
+          <option value="Msaken" >Msaken</option>
+          <option value="Sousse Corniche a Sousse Ville" >Sousse Corniche a Sousse Ville</option>
+          <option value="Zone Touristique a Monastir Ville" >Zone Touristique a Monastir Ville</option>
+          <option value="Nabeul" >Nabeul</option>
+          <option value="Bou Hnech a Raoued" >Bou Hnech a Raoued</option>
+          <option value="Cite Ettadhamen a Ettadhamen" >Cite Ettadhamen a Ettadhamen</option>
+          <option value="Douar Hicher a Douar Hicher" >Douar Hicher a Douar Hicher</option>
+          <option value="Chotrana 2 a La Soukra" >Chotrana 2 a La Soukra</option>
+          <option value="Aouina a La Marsa" >Aouina a La Marsa</option>
+          <option value="Borj Cedria a Hammam Chatt" >Borj Cedria a Hammam Chatt</option>
+          <option value="Akouda a Akouda" >Akouda a Akouda</option>
+          <option value="Ajim a Ajim" >Ajim a Ajim</option>
+          <option value="Essanhaji a Mnihla" >Essanhaji a Mnihla</option>
+          <option value="Habib Thameur a Tunis" >Habib Thameur a Tunis</option>
+          <option value="Cite Ennacim 2 a Mohamadia" >Cite Ennacim 2 a Mohamadia</option>
+          <option value="El Aroussa" >El Aroussa</option>
+          <option value="Cite Ennacim a La Soukra" >Cite Ennacim a La Soukra</option>
+          <option value="Sfax Ville a Sfax Ville" >Sfax Ville a Sfax Ville</option>
+          <option value="Cite Ennkhilet a Raoued" >Cite Ennkhilet a Raoued</option>
+          <option value="Zaghouan" >Zaghouan</option>
+          <option value="Ksar Hellal" >Ksar Hellal</option>
+          <option value="Megrine Coteau a Megrine" >Megrine Coteau a Megrine</option>
+          <option value="Enfidha" >Enfidha</option>
+          <option value="Nouvelle Ariana a Ariana Ville" >Nouvelle Ariana a Ariana Ville</option>
+          <option value="Place 3 Août a Monastir Ville" >Place 3 Août a Monastir Ville</option>
+          <option value="Menzel Jemil" >Menzel Jemil</option>
+          <option value="Cite Ennajet a Jedaida" >Cite Ennajet a Jedaida</option>
+          <option value="Hammam El Ghezaz" >Hammam El Ghezaz</option>
+          <option value="La Manouba a La Manouba" >La Manouba a La Manouba</option>
+          <option value="Jendouba Ville" >Jendouba Ville</option>
+          <option value="Cite Ennasr 2 a Ariana Ville" >Cite Ennasr 2 a Ariana Ville</option>
+          <option value="Mornag" >Mornag</option>
+          <option value="Cite El Khalil a La Marsa" >Cite El Khalil a La Marsa</option>
+          <option value="Gammarth Superieur a La Marsa" >Gammarth Superieur a La Marsa</option>
+          <option value="Cite El Mourouj a Kalaat Landalous" >Cite El Mourouj a Kalaat Landalous</option>
+          <option value="Sidi Hassine a Sidi Hassine" >Sidi Hassine a Sidi Hassine</option>
+          <option value="Hammamet Nord a Hammamet" >Hammamet Nord a Hammamet</option>
+          <option value="Matmata" >Matmata</option>
+          <option value="Montplaisir a Tunis" >Montplaisir a Tunis</option>
+          <option value="Bouficha" >Bouficha</option>
+          <option value="Hammam Sousse" >Hammam Sousse</option>
+          <option value="Mornaguia 20 Mars a Mornaguia" >Mornaguia 20 Mars a Mornaguia</option>
+          <option value="Aouina a Tunis" >Aouina a Tunis</option>
+          <option value="Aghir a Midoun" >Aghir a Midoun</option>
+          <option value="El Mourouj 3 a El Mourouj" >El Mourouj 3 a El Mourouj</option>
+          <option value="Ain Draham" >Ain Draham</option>
+          <option value="Cite Essaada a Ariana Ville" >Cite Essaada a Ariana Ville</option>
+          <option value="Cite El Fateh a La Marsa" >Cite El Fateh a La Marsa</option>
+          <option value="Borj Youssef a Sidi Thabet" >Borj Youssef a Sidi Thabet</option>
+          <option value="Cite Boussouffara a Hammam Lif" >Cite Boussouffara a Hammam Lif</option>
+          <option value="Mellita a Houmt Souk" >Mellita a Houmt Souk</option>
+          <option value="Cite Moncef Bey a El Mourouj" >Cite Moncef Bey a El Mourouj</option>
+          <option value="Aeroport Tunis Carthage a La Soukra" >Aeroport Tunis Carthage a La Soukra</option>
+          <option value="Makthar" >Makthar</option>
+          <option value="Birine a Sidi Hassine" >Birine a Sidi Hassine</option>
+          <option value="Gammarth Village a La Marsa" >Gammarth Village a La Marsa</option>
+          <option value="Sidi Amor a Le Kram" >Sidi Amor a Le Kram</option>
+          <option value="Khezama a Sousse Jaouhara" >Khezama a Sousse Jaouhara</option>
+          <option value="Ariana Ville" >Ariana Ville</option>
+          <option value="Cite Mohamed Ali a Carthage" >Cite Mohamed Ali a Carthage</option>
+          <option value="El Menzah" >El Menzah</option>
+          <option value="Cite Ben Gamra a Boumhel Bassatine" >Cite Ben Gamra a Boumhel Bassatine</option>
+          <option value="Cite Bou Mhel a Boumhel Bassatine" >Cite Bou Mhel a Boumhel Bassatine</option>
+          <option value="Cite El Behi Ladghem a La Soukra" >Cite El Behi Ladghem a La Soukra</option>
+          <option value="Chebedda a Fouchana" >Chebedda a Fouchana</option>
+          <option value="El Mourouj 4 a El Mourouj" >El Mourouj 4 a El Mourouj</option>
+          <option value="El Menzah 8 a Ariana Ville" >El Menzah 8 a Ariana Ville</option>
+          <option value="Ghannouch" >Ghannouch</option>
+          <option value="Tezdaine" >Tezdaine</option>
+          <option value="Le Bardo a Le Bardo" >Le Bardo a Le Bardo</option>
+          <option value="Megrine Chaker a Megrine" >Megrine Chaker a Megrine</option>
+          <option value="Les Berges Du Lac 1 a La Marsa" >Les Berges Du Lac 1 a La Marsa</option>
+          <option value="Mosque Erraoudha a La Soukra" >Mosque Erraoudha a La Soukra</option>
+          <option value="Hammam Lif a Hammam Lif" >Hammam Lif a Hammam Lif</option>
+          <option value="Salambo a Carthage" >Salambo a Carthage</option>
+          <option value="Bir Bouregba" >Bir Bouregba</option>
+          <option value="Carthage a Carthage" >Carthage a Carthage</option>
+          <option value="Hammam Chatt a Hammam Chatt" >Hammam Chatt a Hammam Chatt</option>
+          <option value="Les Deux Oueds a Nabeul" >Les Deux Oueds a Nabeul</option>
+          <option value="Ras Jebel" >Ras Jebel</option>
+          <option value="Gabes a Gabes Ville" >Gabes a Gabes Ville</option>
+          <option value="Ibn Sina a El Kabaria" >Ibn Sina a El Kabaria</option>
+          <option value="Cite El Bassatine Ancien a Boumhel Bassatine" >Cite El Bassatine Ancien a Boumhel Bassatine</option>
+          <option value="Debouzville a El Ouardia" >Debouzville a El Ouardia</option>
+          <option value="Menzel Temime" >Menzel Temime</option>
+          <option value="Bou Regba a Mornaguia" >Bou Regba a Mornaguia</option>
+          <option value="Menzel Bourguiba" >Menzel Bourguiba</option>
+          <option value="Bou Argoub" >Bou Argoub</option>
+          <option value="Bhar Lazreg a La Marsa" >Bhar Lazreg a La Marsa</option>
+          <option value="Cite Ennasr 1 a Ariana Ville" >Cite Ennasr 1 a Ariana Ville</option>
+          <option value="Mornaguia a Mornaguia" >Mornaguia a Mornaguia</option>
+          <option value="La Manouba" >La Manouba</option>
+          <option value="Kairouan Sud" >Kairouan Sud</option>
+          <option value="Cite El Wafa a Nabeul" >Cite El Wafa a Nabeul</option>
+          <option value="Mnihla a Mnihla" >Mnihla a Mnihla</option>
+          <option value="Mutuelle Ville a El Menzah" >Mutuelle Ville a El Menzah</option>
+          <option value="Cite Rafaha a Mnihla" >Cite Rafaha a Mnihla</option>
+          <option value="Tantana a Akouda" >Tantana a Akouda</option>
+          <option value="El Omrane a El Omrane" >El Omrane a El Omrane</option>
+          <option value="Cite Jaouhara" >Cite Jaouhara</option>
+          <option value="El Menzah 1 a El Menzah" >El Menzah 1 a El Menzah</option>
+          <option value="Neapolis a Nabeul" >Neapolis a Nabeul</option>
+          <option value="Takelsa" >Takelsa</option>
+          <option value="Cite des Juges a Boumhel Bassatine" >Cite des Juges a Boumhel Bassatine</option>
+          <option value="Hammamet Sud a Hammamet" >Hammamet Sud a Hammamet</option>
+          <option value="Ennasr" >Ennasr</option>
+          <option value="Maakel Ezzaim a Tunis" >Maakel Ezzaim a Tunis</option>
+          <option value="Sousse Corniche" >Sousse Corniche</option>
+          <option value="La Soukra" >La Soukra</option>
+          <option value="Tazarka" >Tazarka</option>
+          <option value="Cite de la Plage 1" >Cite de la Plage 1</option>
+          <option value="El Mourouj 6 a El Mourouj" >El Mourouj 6 a El Mourouj</option>
+          <option value="Tantana" >Tantana</option>
+          <option value="Cite El Agba a Monastir Ville" >Cite El Agba a Monastir Ville</option>
+          <option value="La Marsa a La Marsa" >La Marsa a La Marsa</option>
+          <option value="Mahdia Ville a Mahdia Ville" >Mahdia Ville a Mahdia Ville</option>
+          <option value="Cite Les Pins a La Marsa" >Cite Les Pins a La Marsa</option>
+          <option value="Amilcar a Carthage" >Amilcar a Carthage</option>
+          <option value="Bouhssina a Sousse Ville" >Bouhssina a Sousse Ville</option>
+          <option value="Ettahrir a Ettahrir" >Ettahrir a Ettahrir</option>
+          <option value="Oued Ellil a Oued Ellil" >Oued Ellil a Oued Ellil</option>
+          <option value="Sidi Bousaid a Carthage" >Sidi Bousaid a Carthage</option>
+          <option value="Route sokra a Sfax Ville" >Route sokra a Sfax Ville</option>
+          <option value="Beni Khiar a Beni Khiar" >Beni Khiar a Beni Khiar</option>
+          <option value="Khaznadar a Le Bardo" >Khaznadar a Le Bardo</option>
+          <option value="Tunis Belvedere a El Menzah" >Tunis Belvedere a El Menzah</option>
+          <option value="Bab Saadoun a Tunis" >Bab Saadoun a Tunis</option>
+          <option value="Nabeul a Nabeul" >Nabeul a Nabeul</option>
+          <option value="Bizerte Hached a Bizerte Sud" >Bizerte Hached a Bizerte Sud</option>
+          <option value="Raoued a Raoued" >Raoued a Raoued</option>
+          <option value="Sakiet Ezzit a Sakiet Ezzit" >Sakiet Ezzit a Sakiet Ezzit</option>
+          <option value="Bab Souika a Tunis" >Bab Souika a Tunis</option>
+          <option value="Sousse Medina a Sousse Ville" >Sousse Medina a Sousse Ville</option>
+          <option value="Sidi Abbes a Sfax Sud" >Sidi Abbes a Sfax Sud</option>
+          <option value="Cite Essalama a La Marsa" >Cite Essalama a La Marsa</option>
+          <option value="Rades Mongil a Rades" >Rades Mongil a Rades</option>
+          <option value="Cite Hedi Nouira a La Soukra" >Cite Hedi Nouira a La Soukra</option>
+          <option value="Le Kram a Le Kram" >Le Kram a Le Kram</option>
+          <option value="Sidi Thabet a Sidi Thabet" >Sidi Thabet a Sidi Thabet</option>
+          <option value="Ariana Essoghra a Raoued" >Ariana Essoghra a Raoued</option>
+          <option value="Ezzahra a Ezzahra" >Ezzahra a Ezzahra</option>
+          <option value="Cite Ain Meriem a Bizerte Nord" >Cite Ain Meriem a Bizerte Nord</option>
+          <option value="Sidi Daoued a La Marsa" >Sidi Daoued a La Marsa</option>
+          <option value="Cite El Mistiri a Sidi Hassine" >Cite El Mistiri a Sidi Hassine</option>
+          <option value="Ksour Essef" >Ksour Essef</option>
+          <option value="Cite Jardins a Cite El Khadra" >Cite Jardins a Cite El Khadra</option>
+          <option value="Sidi Bechir a Tunis" >Sidi Bechir a Tunis</option>
+          <option value="Bab El Assal a Tunis" >Bab El Assal a Tunis</option>
+          <option value="Route El Ain a Sfax Ville" >Route El Ain a Sfax Ville</option>
+          <option value="Cite Essalem a Boumhel Bassatine" >Cite Essalem a Boumhel Bassatine</option>
+          <option value="Ben Nouiji a Mornag" >Ben Nouiji a Mornag</option>
+          <option value="Cite Ibn Khaldoun" >Cite Ibn Khaldoun</option>
+          <option value="Zarzis" >Zarzis</option>
+          <option value="location" >location</option>
+          <option value="Gammarth a La Marsa" >Gammarth a La Marsa</option>
+          <option value="Soliman" >Soliman</option>
+          <option value="Djerba a Djerba" >Djerba a Djerba</option>
+          <option value="Sidi Abdelhamid" >Sidi Abdelhamid</option>
+          <option value="Sidi Messaoud a Mornag" >Sidi Messaoud a Mornag</option>
+          <option value="Les Jardins de Carthage a Le Kram" >Les Jardins de Carthage a Le Kram</option>
+          <option value="Cite El Bahri a Sfax Ouest" >Cite El Bahri a Sfax Ouest</option>
+          <option value="Jedaida a Jedaida" >Jedaida a Jedaida</option>
+          <option value="Khezama Ouest" >Khezama Ouest</option>
+          <option value="Bizerte Nord" >Bizerte Nord</option>
+          <option value="Menzel Hedi Chaker a Menzel Chaker" >Menzel Hedi Chaker a Menzel Chaker</option>
+          <option value="Cite de la Plage a Hammam Sousse" >Cite de la Plage a Hammam Sousse</option>
+          <option value="Cite El Hidhab a Fouchana" >Cite El Hidhab a Fouchana</option>
+          <option value="Route gremda a Sfax Ville" >Route gremda a Sfax Ville</option>
+          <option value="Zaouiet a Sousse Ville" >Zaouiet a Sousse Ville</option>
+          <option value="Sousse Ville" >Sousse Ville</option>
+          <option value="Sidi Bou Ali Sousse" >Sidi Bou Ali Sousse</option>
+          <option value="El Mourouj 2 a El Mourouj" >El Mourouj 2 a El Mourouj</option>
+          <option value="Cite Essahafa a Raoued" >Cite Essahafa a Raoued</option>
+          <option value="Grombalia" >Grombalia</option>
+          <option value="Cite Ennasser a Ettadhamen" >Cite Ennasser a Ettadhamen</option>
+          <option value="Kasserine Sud" >Kasserine Sud</option>
+          <option value="El Manar 2 a El Menzah" >El Manar 2 a El Menzah</option>
+          <option value="Bab Jazira a Tunis" >Bab Jazira a Tunis</option>
+          <option value="Zarzouna" >Zarzouna</option>
+          <option value="El Hamayem a Mornaguia" >El Hamayem a Mornaguia</option>
+          <option value="El Menzah 4 a El Menzah" >El Menzah 4 a El Menzah</option>
+          <option value="El Omrane Superieur a El Omrane Superieur" >El Omrane Superieur a El Omrane Superieur</option>
+          <option value="Cite Ubn Khaldoun a El Omrane Superieur" >Cite Ubn Khaldoun a El Omrane Superieur</option>
+          <option value="Sidi Mansour a Sfax Ville" >Sidi Mansour a Sfax Ville</option>
+          <option value="Hiboun a Mahdia Ville" >Hiboun a Mahdia Ville</option>
+          <option value="Jabbes a Sidi Thabet" >Jabbes a Sidi Thabet</option>
+          <option value="Hammam Sousse Gharbi" >Hammam Sousse Gharbi</option>
+          <option value="Mahdia Ville" >Mahdia Ville</option>
+          <option value="Sousse Jaouhara a Sousse Jaouhara" >Sousse Jaouhara a Sousse Jaouhara</option>
+          <option value="Sidi Ahmed a Bizerte Nord" >Sidi Ahmed a Bizerte Nord</option>
+          <option value="Bizerte a Bizerte Nord" >Bizerte a Bizerte Nord</option>
+          <option value="Hedi Chaker a Tunis" >Hedi Chaker a Tunis</option>
+          <option value="Cite Plein Air a Boumhel Bassatine" >Cite Plein Air a Boumhel Bassatine</option>
+          <option value="Route matar a Sfax Ville" >Route matar a Sfax Ville</option>
+          <option value="Moknine" >Moknine</option>
+          <option value="Cite Taieb Mhiri a Menzel Chaker" >Cite Taieb Mhiri a Menzel Chaker</option>
+          <option value="Cite Belvedere a Bizerte Nord" >Cite Belvedere a Bizerte Nord</option>
+          <option value="Rades a Rades" >Rades a Rades</option>
+          <option value="Megrine Riadh a Megrine" >Megrine Riadh a Megrine</option>
+          <option value="Les Jardins dEl Menzah 1 a Ariana Ville" >Les Jardins dEl Menzah 1 a Ariana Ville</option>
+          <option value="Cite Ennakhil 1 a Ezzahra" >Cite Ennakhil 1 a Ezzahra</option>
+          <option value="La Marsa" >La Marsa</option>
+          <option value="La Goulette" >La Goulette</option>
+          <option value="Bab Bhar a Tunis" >Bab Bhar a Tunis</option>
+          <option value="Cite El Hana a La Marsa" >Cite El Hana a La Marsa</option>
+          <option value="Bizerte Le Corniche a Bizerte Nord" >Bizerte Le Corniche a Bizerte Nord</option>
+          <option value="Cite El Bassatine a El Mourouj" >Cite El Bassatine a El Mourouj</option>
+          <option value="Zone touristique a Midoun" >Zone touristique a Midoun</option>
+          <option value="Raf Raf" >Raf Raf</option>
+          <option value="Sfax Ouest a Sfax Ouest" >Sfax Ouest a Sfax Ouest</option>
+          <option value="Merkez Sahnoun a Sfax Sud" >Merkez Sahnoun a Sfax Sud</option>
+          <option value="Akouda" >Akouda</option>
+          <option value="Ksar Said a Le Bardo" >Ksar Said a Le Bardo</option>
+          <option value="Ghar El Melh" >Ghar El Melh</option>
+          <option value="Village Mediterranee a Rades" >Village Mediterranee a Rades</option>
+          <option value="Barraket Essahel" >Barraket Essahel</option>
+          <option value="Jayara a Sidi Hassine" >Jayara a Sidi Hassine</option>
+          <option value="Kelibia" >Kelibia</option>
+          <option value="Bab El Khadra a Tunis" >Bab El Khadra a Tunis</option>
+          <option value="Fouchana a Fouchana" >Fouchana a Fouchana</option>
+          <option value="Sidi El Mahrsi a Nabeul" >Sidi El Mahrsi a Nabeul</option>
+          <option value="Cite Ennasr a Mnihla" >Cite Ennasr a Mnihla</option>
+          <option value="Les Jardins dEl Menzah 2 a Ariana Ville" >Les Jardins dEl Menzah 2 a Ariana Ville</option>
+          <option value="Hammam Sousse a Hammam Sousse" >Hammam Sousse a Hammam Sousse</option>
+          <option value="Kalaa Sghira" >Kalaa Sghira</option>
+          <option value="Sidi Salah a La Soukra" >Sidi Salah a La Soukra</option>
+          <option value="Saint Gobin a Megrine" >Saint Gobin a Megrine</option>
+          <option value="Aghir" >Aghir</option>
+          <option value="Marsa Erriadh a La Marsa" >Marsa Erriadh a La Marsa</option>
+          <option value="Midoune a Midoun" >Midoune a Midoun</option>
+          <option value="Meghira Centre a Fouchana" >Meghira Centre a Fouchana</option>
+          <option value="Borj Touil a Raoued" >Borj Touil a Raoued</option>
+          <option value="El Mourouj 1 a El Mourouj" >El Mourouj 1 a El Mourouj</option>
+          <option value="Chorchef 2 a Sidi Thabet" >Chorchef 2 a Sidi Thabet</option>
+          <option value="Cite Ennour Jaafar a Raoued" >Cite Ennour Jaafar a Raoued</option>
+          <option value="Tunis" >Tunis</option>
+          <option value="Borj El Amri a Borj El Amri" >Borj El Amri a Borj El Amri</option>
+          <option value="El Yasmina a Carthage" >El Yasmina a Carthage</option>
+          <option value="Route Lafrane a Sfax Ville" >Route Lafrane a Sfax Ville</option>
+          <option value="Rommana a El Omrane Superieur" >Rommana a El Omrane Superieur</option>
+          <option value="Cite El Menzah" >Cite El Menzah</option>
+          <option value="La Medina" >La Medina</option>
+          <option value="Boumhel Bassatine" >Boumhel Bassatine</option>
+          <option value="Megrine a Megrine" >Megrine a Megrine</option>
+          <option value="Beni Khalled" >Beni Khalled</option>
+          <option value="Jemmal" >Jemmal</option>
+          <option value="Gabes Sud" >Gabes Sud</option>
+        </select>
+<!--        <input class="form-control" type="text" id="property-address" placeholder="Adresse" required>-->
+<!--        <div class="invalid-feedback">Entrez l'adresse de votre bien immobilier</div>-->
+      </div>
+      <div class="pt-2 mb-4">
+        <label class="form-label fw-bold mb-2" for="property-area">Surface</label>
+        <input class="form-control" type="number" id="property-area" placeholder="En m²" required>
+        <div class="invalid-feedback">Entrez la surface de votre bien</div>
+      </div>
+      <div *ngIf="typeDuBien.value === 'Appartement' || typeDuBien.value === 'Maison' then AppartementMaison"></div>
+      <ng-template #AppartementMaison>
+      <div class="pt-2 mb-3">
+        <label class="form-label fw-bold mb-2">Nombre de chambres</label>
+        <div class="btn-group" role="group" aria-label="Choose number of rooms">
+          <input class="btn-check" type="radio" id="rooms-1" name="rooms">
+          <label class="btn btn-outline-secondary" for="rooms-1">1</label>
+          <input class="btn-check" type="radio" id="rooms-2" name="rooms">
+          <label class="btn btn-outline-secondary" for="rooms-2">2</label>
+          <input class="btn-check" type="radio" id="rooms-3" name="rooms">
+          <label class="btn btn-outline-secondary" for="rooms-3">3</label>
+          <input class="btn-check" type="radio" id="rooms-4" name="rooms">
+          <label class="btn btn-outline-secondary" for="rooms-4">4</label>
+          <input class="btn-check" type="radio" id="rooms-5" name="rooms">
+          <label class="btn btn-outline-secondary" for="rooms-5">5</label>
+          <input class="btn-check" type="radio" id="rooms-6" name="rooms">
+          <label class="btn btn-outline-secondary" for="rooms-6">6</label>
+        </div>
+      </div>
+      <div class="pt-2 mb-3">
+        <label class="form-label fw-bold mb-2">Nombre de salle de bains</label>
+        <div class="btn-group" role="group" aria-label="Choose number of bathrooms">
+          <input class="btn-check" type="radio" id="rooms1" name="bathrooms">
+          <label class="btn btn-outline-secondary" for="rooms1">1</label>
+          <input class="btn-check" type="radio" id="rooms2" name="bathrooms">
+          <label class="btn btn-outline-secondary" for="rooms2">2</label>
+          <input class="btn-check" type="radio" id="rooms3" name="bathrooms">
+          <label class="btn btn-outline-secondary" for="rooms3">3</label>
+          <input class="btn-check" type="radio" id="rooms4" name="bathrooms">
+          <label class="btn btn-outline-secondary" for="rooms4">4</label>
+          <input class="btn-check" type="radio" id="rooms5" name="bathrooms">
+          <label class="btn btn-outline-secondary" for="rooms5">5</label>
+          <input class="btn-check" type="radio" id="rooms6" name="bathrooms">
+          <label class="btn btn-outline-secondary" for="rooms6">6</label>
+        </div>
+      </div>
+      </ng-template>
+      <div class="mb-4">
+        <label class="form-label d-block fw-bold mb-2 pb-1">Autres </label>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="kitchen">
+              <label class="form-check-label" for="kitchen">Cuisine équipée</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="balcony">
+              <label class="form-check-label" for="balcony">Balcon</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="terrasse">
+              <label class="form-check-label" for="terrasse">Terrasse</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="jardin">
+              <label class="form-check-label" for="jardin">Jardin</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="garage">
+              <label class="form-check-label" for="garage">Garage</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="free-parking">
+              <label class="form-check-label" for="free-parking">Parking</label>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="pool">
+              <label class="form-check-label" for="pool">Piscine</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="air-condition" >
+              <label class="form-check-label" for="air-condition">Climatisation</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="heating">
+              <label class="form-check-label" for="heating">Chauffage</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="security-cameras">
+              <label class="form-check-label" for="security-cameras">Caméra de sécurité</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary d-block w-100 mb-4" type="submit"><i class="fi-calculator me-2"></i>Calculer</button>
+    </form>
+  </div>
+</ng-template>
+
+
+<!-- Footer-->
+<app-footer></app-footer>

@@ -1,0 +1,32 @@
+<main class="page-wrapper">
+  <!-- Header-->
+  <app-header id="top"></app-header>
+<!-- Page container-->
+<div class="container mt-5 mb-md-4 py-5">
+    <!-- Title + Breadcrumb-->
+    <app-breadcrumbs [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+    <h1 class="d-flex align-items-end justify-content-between mb-4">Tableau de bord des ventes et des locations sur WheelWorld</h1>
+
+    <div class="pb-5 pt-2">
+      <swiper [config]="config">
+        <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <!-- Item-->
+          <div class="p-4">
+            <article class="row">
+              <div>
+                <iframe title="Annonces Rapport" width="1500" height="700" align="left" src="https://app.powerbi.com/reportEmbed?reportId=5aea8e62-71bd-425f-bafb-eaeb0420b92b&autoAuth=true&ctid=604f1a96-cbe8-43f8-abbf-f8eaf5d85730" frameborder="0" allowFullScreen="true"></iframe>
+              </div>
+            </article>
+          </div>
+        </div>
+        </div>
+      </swiper>
+    </div>
+</div>
+
+  </main>
+  <!-- Footer-->
+<app-footer></app-footer>
+

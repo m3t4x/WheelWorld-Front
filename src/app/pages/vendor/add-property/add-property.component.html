@@ -1,0 +1,100 @@
+<main class="page-wrapper" xmlns="http://www.w3.org/1999/html">
+  <!-- Header-->
+  <app-header id="top"></app-header>
+
+  <!-- Page container-->
+  <div class="container mt-5 mb-md-4 py-5">
+    <div class="row">
+      <!-- Page content-->
+      <form (ngSubmit)="onSubmit()" [formGroup]="annonceForm">
+      <div class="col-lg-8">
+        <!-- Breadcrumb-->
+        <app-breadcrumbs [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+        <section class="card card-body border-0 shadow-sm p-4 mb-4" id="basic-info" #infoGenerale>
+          <h2 class="h4 mb-4"><i class="fi-info-circle text-primary fs-5 mt-n1 me-2"></i>Informations generales</h2>
+          <div class="mb-3">
+            <label class="form-label" for="ap-title">Titre <span class="text-danger">*</span></label>
+            <input  name="titre" class="form-control" type="text" id="ap-title" placeholder="Titre de l'annonce " required formControlName="titre"><span class="form-text"></span>
+            <div *ngIf="annonceForm.get('titre')?.invalid && (annonceForm.get('titre')?.dirty || annonceForm.get('titre')?.touched)">
+              <div *ngIf="annonceForm.get('titre')?.hasError('required')" style="color: #ED1D24">Le titre est requis</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6 mb-3">
+              <label class="form-label" for="ap-category">Categories<span class="text-danger">*</span></label>
+              <select name="categorie" class="form-select" id="ap-category" required formControlName="categorie" #categorie>
+                <option value="" disabled selected>Choisir une categorie</option>
+                <option value="VENTE">Vente</option>
+                <option value="LOCATION">Location</option>
+              </select>
+              <div *ngIf="annonceForm.get('categorie')?.invalid && (annonceForm.get('categorie')?.dirty || annonceForm.get('categorie')?.touched)">
+                <div *ngIf="annonceForm.get('categorie')?.hasError('required')" style="color: #ED1D24">La catégorie est requise</div>
+              </div>
+            </div>
+            <div class="col-sm-6 mb-3">
+              <label class="form-label" for="ap-type">Type du vehicule <span class="text-danger">*</span></label>
+              <select name="type_Annonce" class="form-select" id="ap-type" required formControlName="type_Annonce" [ngClass]="{'is-invalid': onsubmit && formData['type_Annonce'].errors}" #typeDuBien>
+                <option value="" disabled selected>Choisir le type du vehicule</option>
+                <option value="CITADINE">CITADINE</option>
+                <option value="BERLINE">Berline</option>
+                <option value="SUV">SUV</option>
+                <option value="PICKUP">Pickup</option>
+                <option value="QuatreXQuatre">4x4</option>
+                <option value="COUPE">Coupé</option>
+                <option value="CAMION">Camion</option>
+              </select>
+            </div>
+
+          </div>
+        </section>
+        <section class="card card-body border-0 shadow-sm p-4 mb-4" id="price" #prix>
+          <h2 class="h4 mb-4"><i class="fi-cash text-primary fs-5 mt-n1 me-2"></i>Prix</h2>
+          <label class="form-label" for="ap-price">Prix <span class="text-danger">*</span></label>
+          <div class="d-sm-flex">
+            <h6>Dinar <br>Tunisien <br></h6>
+            <input class="form-control w-100 me-2 mb-2" name="prix" type="number" id="ap-price" min="200" step="50" required formControlName="prix">
+            <div *ngIf="annonceForm.get('prix')?.invalid && (annonceForm.get('prix')?.dirty || annonceForm.get('prix')?.touched)">
+              <div *ngIf="annonceForm.get('prix')?.hasError('required')" style="color: #ED1D24">Le prix est requis</div>
+            </div>
+            <ng-template #location>
+<!--            <select class="form-select w-50 mb-2" >-->
+<!--              <option value="mois" selected>Par mois</option>-->
+<!--              <option value="ans" >Par ans</option>-->
+<!--            </select>-->
+              <p style="margin-left: 10px">Par mois</p>
+            </ng-template>
+          </div>
+        </section>
+        <!-- Photos / video-->
+        <section class="card card-body border-0 shadow-sm p-4 mb-4" id="photos" #photos>
+          <h2 class="h4 mb-4"><i class="fi-image text-primary fs-5 mt-n1 me-2"></i>Photos<span class="text-danger">*</span></h2>
+          <div class="alert alert-info mb-4" role="alert">
+            <div class="d-flex"><i class="fi-alert-circle me-2 me-sm-3"></i>
+              <p class="fs-sm mb-1">Ajouter des images</p>
+            </div>
+          </div>
+          <div class="container row">
+            <div class="col-md-12">
+              <h1>Ajouter une image</h1>
+            </div>
+          </div>
+
+          <div class="container row">
+            <div id="drag-drop-area">
+              <input type="file" multiple (change)="onSelectFile($event)" draggable="true" required formControlName="images" name="images">
+              <img [src]="imgURL" height="100" width="100" *ngIf="imgURL">
+            </div>
+          </div>
+          <div *ngIf="annonceForm.get('images')?.invalid && (annonceForm.get('images')?.dirty || annonceForm.get('images')?.touched)">
+            <div *ngIf="annonceForm.get('images')?.hasError('required')" style="color: #ED1D24">L'image est requis</div>
+          </div>
+        </section>
+           <section class="d-sm-flex justify-content-between pt-2"> <button class="btn btn-primary btn-lg d-block mb-2"  type="submit" #ajouterAnnonce>Publier</button></section>
+      </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<!-- Footer-->
+<app-footer></app-footer>

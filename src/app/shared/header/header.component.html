@@ -1,0 +1,315 @@
+ <!-- Navbar-->
+ <header class="navbar navbar-expand-lg navbar-light bg-light fixed-top" data-scroll-header (window:scroll)="windowScroll()">
+  <div class="container"><a class="navbar-brand me-3 me-xl-4" routerLink=""><img class="d-block" src="assets/img/logo/wheel.png" width="45" alt="Finder"></a>
+    <button class="navbar-toggler ms-auto" type="submit" (click)="changeMode()">Mode visuel</button>
+    <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" (click)="toggleMobileMenu()"><span class="navbar-toggler-icon"></span></button>
+<!--    <div *ngIf="utilisateur.isConnected then connection "></div>-->
+<!--    <ng-template #connection>-->
+
+    <div *ngIf="tokenStorage.isLoggedIn() === false then seConnecter "></div>
+    <ng-template #seConnecter>
+      <a class="btn btn-sm text-primary d-none d-lg-block order-lg-3" href="javascript:void(0);" (click)="toggleModal(toggleFirstModal)" data-bs-toggle="modal"><i class="fi-user me-2"></i>Se connecter</a>
+    </ng-template>
+    <div *ngIf="tokenStorage.isLoggedIn() === true then nomU "></div>
+    <ng-template #nomU>
+      <p class="btn btn-sm text-primary d-none d-lg-block order-lg-3" (click)="toggleModal2(toggleFirstModal)">{{tokenStorage.getNom()}}</p>
+    </ng-template>
+<!--&lt;!&ndash;    </ng-template>&ndash;&gt;-->
+<!--    <div *ngIf="!utilisateur.isConnected then deconnexion "></div>-->
+<!--    <ng-template #deconnexion>-->
+<!--    <a class="btn btn-sm text-primary d-none d-lg-block order-lg-3" href="javascript:void(0);" (click)="sedeconnecter()" data-bs-toggle="modal"><i class="fi-user me-2"></i>Se déconnecter</a>-->
+    <div *ngIf="tokenStorage.isLoggedIn() === true then ajoutAnnonce"></div>
+    <ng-template #ajoutAnnonce>
+    <a class="btn btn-primary btn-sm ms-2 order-lg-3" href="/vendor/add-property"><i class="fi-plus me-2"></i>Ajouter<span class='d-none d-sm-inline'> une annonce</span></a>
+    </ng-template>
+<!--    </ng-template>-->
+    <div class="collapse navbar-collapse order-lg-2" id="navbarNav">
+      <ul class="navbar-nav navbar-nav-scroll" style="max-height: 35rem;">
+
+        <div *ngIf="tokenStorage.isLoggedIn() === false then headerVisiteur"></div>
+        <ng-template #headerVisiteur>
+          <ng-container *ngFor="let item of MenuVisiteur">
+            <li class="nav-item dropdown">
+              <a class="nav-link" *ngIf="!item.subItems"
+                 id="topnav-component"
+                 href="{{item.link}}" role="button">
+                {{ item.label}}
+              </a>
+
+              <a *ngIf="item.subItems" class="nav-link dropdown-toggle"
+                 (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components"
+                 role="button">
+                {{item.label }}
+              </a>
+
+              <ul class="dropdown-menu" aria-labelledby="topnav-dashboard" *ngIf="hasItems(item)">
+                <ng-template ngFor let-i="index" let-subitem [ngForOf]="item.subItems">
+                  <a class="col dropdown-item side-nav-link-ref" *ngIf="!hasItems(subitem)"
+                     routerLink="{{subitem.link}}"
+                     routerLinkActive="active">{{subitem.label }}</a>
+
+                  <div class="dropdown" *ngIf="hasItems(subitem)">
+                    <a class="dropdown-item dropdown-toggle" href="javascript:void(0);"
+                       (click)="onMenuClick($event)">{{ subitem.label }}
+                      <div class="arrow-down"></div>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <ng-template ngFor let-subSubitem [ngForOf]="subitem.subItems">
+                        <a class="dropdown-item" *ngIf="!hasItems(subSubitem)"
+                           routerLink="{{subSubitem.link}}"
+                           routerLinkActive="active">{{ subSubitem.label }}</a>
+                      </ng-template>
+                    </ul>
+                  </div>
+                </ng-template>
+              </ul>
+
+            </li>
+          </ng-container>
+        </ng-template>
+
+        <div *ngIf="tokenStorage.getUser()['roles'] === 'ADMIN' then headerAdmin"></div>
+        <ng-template #headerAdmin>
+        <ng-container *ngFor="let item of menuAdminItems">
+          <li class="nav-item dropdown">
+            <a class="nav-link" *ngIf="!item.subItems"
+                id="topnav-component"
+                href="{{item.link}}" role="button">
+                {{ item.label}}
+            </a>
+
+            <a *ngIf="item.subItems" class="nav-link dropdown-toggle"
+                (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components"
+                role="button">
+                {{item.label }}
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="topnav-dashboard" *ngIf="hasItems(item)">
+              <ng-template ngFor let-i="index" let-subitem [ngForOf]="item.subItems">
+                  <a class="col dropdown-item side-nav-link-ref" *ngIf="!hasItems(subitem)"
+                       routerLink="{{subitem.link}}"
+                      routerLinkActive="active">{{subitem.label }}</a>
+
+                  <div class="dropdown" *ngIf="hasItems(subitem)">
+                      <a class="dropdown-item dropdown-toggle" href="javascript:void(0);"
+                          (click)="onMenuClick($event)">{{ subitem.label }}
+                          <div class="arrow-down"></div>
+                      </a>
+                      <ul class="dropdown-menu">
+                          <ng-template ngFor let-subSubitem [ngForOf]="subitem.subItems">
+                              <a class="dropdown-item" *ngIf="!hasItems(subSubitem)"
+                                 routerLink="{{subSubitem.link}}"
+                                  routerLinkActive="active">{{ subSubitem.label }}</a>
+                          </ng-template>
+                        </ul>
+                  </div>
+              </ng-template>
+            </ul>
+
+          </li>
+        </ng-container>
+        </ng-template>
+
+        <div *ngIf="tokenStorage.getUser()['roles'] === 'USER' then headerUser"></div>
+        <ng-template #headerUser>
+          <ng-container *ngFor="let item of menuItems">
+            <li class="nav-item dropdown">
+              <a class="nav-link" *ngIf="!item.subItems"
+                 id="topnav-component"
+                 href="{{item.link}}" role="button">
+                {{ item.label}}
+              </a>
+
+              <a *ngIf="item.subItems" class="nav-link dropdown-toggle"
+                 (click)="onMenuClick($event)" href="javascript: void(0);" id="topnav-components"
+                 role="button">
+                {{item.label }}
+              </a>
+
+              <ul class="dropdown-menu" aria-labelledby="topnav-dashboard" *ngIf="hasItems(item)">
+                <ng-template ngFor let-i="index" let-subitem [ngForOf]="item.subItems">
+                  <a class="col dropdown-item side-nav-link-ref" *ngIf="!hasItems(subitem)"
+                     routerLink="{{subitem.link}}"
+                     routerLinkActive="active">{{subitem.label }}</a>
+
+                  <div class="dropdown" *ngIf="hasItems(subitem)">
+                    <a class="dropdown-item dropdown-toggle" href="javascript:void(0);"
+                       (click)="onMenuClick($event)">{{ subitem.label }}
+                      <div class="arrow-down"></div>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <ng-template ngFor let-subSubitem [ngForOf]="subitem.subItems">
+                        <a class="dropdown-item" *ngIf="!hasItems(subSubitem)"
+                           routerLink="{{subSubitem.link}}"
+                           routerLinkActive="active">{{ subSubitem.label }}</a>
+                      </ng-template>
+                    </ul>
+                  </div>
+                </ng-template>
+              </ul>
+
+            </li>
+          </ng-container>
+        </ng-template>
+
+        </ul>
+
+    </div>
+  </div>
+</header>
+<!-- Page content-->
+
+<!-- Toggle Modal  -->
+ <!-- Sign In Modal-->
+ <ng-template #toggleFirstModal let-modal>
+  <div class="modal-body px-0 py-2 py-sm-0">
+      <button class="btn-close position-absolute top-0 end-0 mt-3 me-3" type="button" data-bs-dismiss="modal" (click)="modal.dismiss('Cross click')"></button>
+      <div class="row mx-0 align-items-center">
+      <div class="col-md-6 border-end-md p-4 p-sm-5">
+          <h2 class="h3 mb-4 mb-sm-5">Bienvenue sur <br>WheelWorld</h2><img class="d-block mx-auto" src="assets/img/logo/wheel.png" width="344" alt="Illustartion">
+          <div class="mt-4 mt-sm-5">Vous n'avez pas de compte ? <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-dismiss="modal" (click)="secondModal(toggleSecondModal)"
+            (click)="modal.close('Close click')">Créer votre compte ici</a></div>
+      </div>
+      <div class="col-md-6 px-4 pt-2 pb-4 px-sm-5 pb-sm-5 pt-md-5">
+          <form class="needs-validation" novalidate (ngSubmit)="validSubmit()" [formGroup]="signInform">
+                      <div class="mb-4">
+              <label class="form-label mb-2" for="signin-username">Nom d'utilisateur</label>
+              <input formControlName="nomUtilisateur" name="nomUtilisateur" class="form-control" type="text" id="signin-username" placeholder="Enter your email" required>
+                        <div *ngIf="signInform.get('nomUtilisateur')?.invalid && (signInform.get('nomUtilisateur')?.dirty || signInform.get('nomUtilisateur')?.touched)">
+                          <div *ngIf="signInform.get('nomUtilisateur')?.hasError('required')" style="color: #ED1D24">Le nom d'utilisateur est requis.</div>
+                        </div>
+               </div>
+          <div class="mb-4">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+              <label class="form-label mb-0" for="signin-password">Mot de passe</label>
+              </div>
+              <div class="password-toggle">
+              <input formControlName="password" name="password" type="password" class="form-control" [type]="loginPassfield ? 'text' : 'password'" id="signin-password" placeholder="Mot de passe" required>
+              <label class="password-toggle-btn" aria-label="Show/hide password">
+                  <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator" [ngClass]="{'mdi-eye-off-outline': !loginPassfield, 'mdi-eye-outline': loginPassfield
+                }" (click)="toggleLoginPassField()"></span>
+              </label>
+              </div>
+            <div *ngIf="signInform.get('password')?.invalid && (signInform.get('password')?.dirty || signInform.get('password')?.touched)">
+              <div *ngIf="signInform.get('password')?.hasError('required')" style="color: #ED1D24">Le mot de passe est requis.</div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-lg w-100" type="submit" (click)="toggleModal2(toggleFirstModal)">Se connecter</button>
+          </form>
+      </div>
+      </div>
+  </div>
+</ng-template>
+
+ <!-- Sign Up Modal-->
+ <ng-template #toggleSecondModal let-modal>
+    <div class="modal-body px-0 py-2 py-sm-0">
+      <button class="btn-close position-absolute top-0 end-0 mt-3 me-3" type="button" data-bs-dismiss="modal" (click)="modal.dismiss('Cross click')"></button>
+      <div class="row mx-0 align-items-center">
+        <div class="col-md-6 border-end-md p-4 p-sm-5">
+          <h2 class="h3 mb-4 mb-sm-5">Bienvenue sur <br>WheelWorld</h2>
+<!--          <h2 class="h3 mb-4 mb-sm-5">Join Rhestia.<br>Get premium benefits:</h2>-->
+          <ul class="list-unstyled mb-4 mb-sm-5">
+            <li class="d-flex mb-2"><i class="fi-check-circle text-primary mt-1 me-2"></i><span>Vendre des véhicules</span></li>
+            <li class="d-flex mb-2"><i class="fi-check-circle text-primary mt-1 me-2"></i><span></span>Louer des véhicules</li>
+            <li class="d-flex mb-0"><i class="fi-check-circle text-primary mt-1 me-2"></i><span>Laisser votre avis pour nous aideer à améliorer votre expérience chez nous</span></li>
+          </ul>
+          <img class="d-block mx-auto" src="assets/img/logo/wheel.png" width="344" alt="Illustartion">
+          <div class="mt-sm-4 pt-md-3">Vous avez déjà un compte ? <a href="javascript:void(0);" (click)="toggleModal(toggleFirstModal)" (click)="modal.close('Close click')" data-bs-toggle="modal" data-bs-dismiss="modal">Se connecter</a></div>
+        </div>
+        <div class="col-md-6 px-4 pt-2 pb-4 px-sm-5 pb-sm-5 pt-md-5">
+          <form class="needs-validation" novalidate (ngSubmit)="formSubmit()" [formGroup]="signUpform">
+            <div class="mb-4">
+              <label class="form-label" for="signup-name">Nom et prenom<span class="text-danger">*</span></label>
+              <input class="form-control" type="text" id="signup-name" placeholder="Nom et prenom" required formControlName="nom" name="nom">
+              <div *ngIf="signUpform.get('nom')?.invalid && (signUpform.get('nom')?.dirty || signUpform.get('nom')?.touched)">
+                <div *ngIf="signUpform.get('nom')?.hasError('required')" style="color: #ED1D24">Le nom est requis et doit contenir minimum 3 caractères.</div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="signup-name">Nom d'utilisateur<span class="text-danger">*</span></label>
+              <input class="form-control" type="text" id="signup-username" placeholder="Nom d'utilisateur" required formControlName="nomUtilisateur" name="nomUtilisateur" >
+              <div *ngIf="signUpform.get('nomUtilisateur')?.invalid && (signUpform.get('nomUtilisateur')?.dirty || signUpform.get('nomUtilisateur')?.touched)">
+                <div *ngIf="signUpform.get('nomUtilisateur')?.hasError('required')" style="color: #ED1D24">Le nom d'utilisateur est requis et doit contenir minimum 3 caractères.</div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="genre">Vous êtes un(e) <span class="text-danger">*</span></label>
+              <select class="form-select" id="type_utilisateur" required formControlName="type_utilisateur" name="type_utilisateur">
+                  <option value="" disabled selected>Type de client</option>
+                  <option value="PARTICULIER">Particulier</option>
+                  <option value="SOCIETE">Société</option>
+              </select>
+              <div *ngIf="signUpform.get('type_utilisateur')?.invalid && (signUpform.get('type_utilisateur')?.dirty || signUpform.get('type_utilisateur')?.touched)">
+                <div *ngIf="signUpform.get('type_utilisateur')?.hasError('required')" style="color: #ED1D24">le type d'utilisateur est requis</div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="genre">Genre<span class="text-danger">*</span></label>
+              <select class="form-select" id="genre" required formControlName="genre" name="genre">
+                <option value="" disabled selected>Sélectionner votre genre</option>
+                <option value="HOMME">Homme</option>
+                <option value="FEMME">Femme</option>
+              </select>
+              <div *ngIf="signUpform.get('genre')?.invalid && (signUpform.get('genre')?.dirty || signUpform.get('genre')?.touched)">
+                <div *ngIf="signUpform.get('genre')?.hasError('required')" style="color: #ED1D24">Le genre est requis </div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="etatCivil">Etat Civil<span class="text-danger">*</span></label>
+              <select class="form-select" id="etatCivil" required formControlName="etatCivil" name="etatCivil">
+                <option value="" disabled selected>Sélectionner votre état civil</option>
+                <option value="CELIBATERE">Célibataire</option>
+                <option value="MARIE">Marié(e)</option>
+                <option value="DIVORCE">Divorcé(e)</option>
+              </select>
+              <div *ngIf="signUpform.get('etatCivil')?.invalid && (signUpform.get('etatCivil')?.dirty || signUpform.get('etatCivil')?.touched)">
+                <div *ngIf="signUpform.get('etatCivil')?.hasError('required')" style="color: #ED1D24">L'état civil est requis</div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="signup-name">Adresse<span class="text-danger">*</span></label>
+              <input formControlName="adresse" name="adresse" class="form-control" type="text" id="signup-adresse" placeholder="Adresse" required>
+              <div *ngIf="signUpform.get('adresse')?.invalid && (signUpform.get('adresse')?.dirty || signUpform.get('adresse')?.touched)">
+                <div *ngIf="signUpform.get('adresse')?.hasError('required')" style="color: #ED1D24">L'adresse est requise</div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="signup-name">Numéro de téléphone<span class="text-danger">*</span></label>
+              <input formControlName="numTel" name="numTel" class="form-control" type="number" id="signup-numTel" placeholder="Numéro de téléphone" required>
+              <div *ngIf="signUpform.get('numTel')?.invalid && (signUpform.get('numTel')?.dirty || signUpform.get('numTel')?.touched)">
+                <div *ngIf="signUpform.get('numTel')?.hasError('required')" style="color: #ED1D24">Le numéro de téléphone est requis et doit contenir minimum 8 chiffres.</div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="signup-name">Date de naissance<span class="text-danger">*</span></label>
+              <input formControlName="dateDeNaissance" name="dateDeNaissance" class="form-control" type="date" id="signup-date"  required>
+              <div *ngIf="signUpform.get('dateDeNaissance')?.invalid && (signUpform.get('dateDeNaissance')?.dirty || signUpform.get('dateDeNaissance')?.touched)">
+                <div *ngIf="signUpform.get('dateDeNaissance')?.hasError('required')" style="color: #ED1D24">La date de naissance est requise</div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="signup-email">Email<span class="text-danger">*</span></label>
+              <input formControlName="email" name="email" class="form-control" type="email" id="signup-email" placeholder="Entrer votre email" required>
+              <div *ngIf="signUpform.get('email')?.invalid && (signUpform.get('email')?.dirty || signUpform.get('email')?.touched)">
+                <div *ngIf="signUpform.get('email')?.hasError('required')" style="color: #ED1D24">L'email est requis</div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <div class="password-toggle">
+                <label class="form-label">Mot de passe<span class="text-danger">*</span></label>
+                <input formControlName="password" name="password" type="password" placeholder="*********" class="form-control" [type]="signupPassfield ? 'text' : 'password'" id="signup-password" minlength="4" required>
+                <label class="password-toggle-btn" aria-label="Show/hide password">
+                  <input class="password-toggle-check" type="checkbox"><span class="password-toggle-indicator" [ngClass]="{'mdi-eye-off-outline': !signupPassfield, 'mdi-eye-outline': signupPassfield}" (click)="toggleSignUpPassField()"></span>
+                </label>
+              </div>
+              <div *ngIf="signUpform.get('password')?.invalid && (signUpform.get('password')?.dirty || signUpform.get('password')?.touched)">
+                <div *ngIf="signUpform.get('password')?.hasError('required')" style="color: #ED1D24">Le mot de passe est requis et doit contenir minimum 4 caractères.</div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-lg w-100" type="submit" (click)="toggleModal2(toggleFirstModal)">S'inscrire</button>
+          </form>
+        </div>
+      </div>
+    </div>
+ </ng-template>

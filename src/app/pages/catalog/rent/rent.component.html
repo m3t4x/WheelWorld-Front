@@ -1,0 +1,277 @@
+<main class="page-wrapper">
+  <!-- Header-->
+  <app-header id="top"></app-header>
+
+  <!-- Page container-->
+  <div class="container-fluid mt-5 pt-5 p-0">
+    <div class="row g-0 mt-n3">
+      <!-- Filters sidebar (Offcanvas on mobile)-->
+      <aside class="col-lg-4 col-xl-3 border-top-lg border-end-lg shadow-sm px-3 px-xl-4 px-xxl-5 pt-lg-2">
+        <div class="offcanvas offcanvas-start offcanvas-collapse" id="filters-sidebar">
+          <div class="offcanvas-header d-flex d-lg-none align-items-center">
+            <h2 class="h5 mb-0">Filtres</h2>
+            <button class="btn-close" type="button" data-bs-dismiss="offcanvas" (click)="SidebarHide()"></button>
+          </div>
+          <div class="offcanvas-header d-block border-bottom pt-0 pt-lg-4 px-lg-0">
+            <ul class="nav nav-tabs mb-0">
+              <li class="nav-item"><a class="nav-link active" routerLink="/catalog/rent"><i
+                class="fi-rent fs-base me-2"></i>Location</a></li>
+              <li class="nav-item"><a class="nav-link" routerLink="/catalog/sale"><i
+                class="fi-home fs-base me-2"></i>Vente</a></li>
+            </ul>
+          </div>
+          <form >
+          <div class="offcanvas-body py-lg-4">
+
+<!--            <div class="offcanvas-header d-block border-bottom pt-0 pt-lg-4 px-lg-0">-->
+<!--              <h6><i class="fi-arrows-sort text-muted mt-n1 me-2"></i>Trier les locations par prix </h6>-->
+<!--              <ul>-->
+<!--                <li>-->
+<!--                  <div class="form-check">-->
+<!--                    <input class="form-check-input" type="radio" id="prixDESC" value="prixDESC" name="prix"-->
+<!--                           (change)="getAllLocationSortedByPriceDESC()">-->
+<!--                    <label class="form-check-label fs-sm">Du plus cher au moins cher</label>-->
+<!--                  </div>-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                  <div class="form-check">-->
+<!--                    <input class="form-check-input" type="radio" id="PrixASC" value="prixASC" name="prix"-->
+<!--                           (change)="getAllLocationSortedByPriceASC()">-->
+<!--                    <label class="form-check-label fs-sm">Du moins cher au plus cher</label>-->
+<!--                  </div>-->
+<!--                </li>-->
+<!--              </ul>-->
+<!--            </div>-->
+<!--            <hr class="d-none d-sm-block w-100 mx-4">-->
+<!--            <h6 style="margin-left: 110px">Les filtres</h6>-->
+
+            <div class="pb-4 mb-2">
+              <h3 class="h6">Region</h3>
+              <select [(ngModel)]="filterCriteria.region" [ngModelOptions]="{standalone:true}" class="form-select mb-2" id="location" name="region"(change)="getAllRents()">
+                <option disabled selected> Choisir une region</option>
+                <option value="TUNIS" >TUNIS</option>
+                <option value="ARIANA">ARIANA</option>
+                <option value="BEN_AROUS">BEN_AROUS</option>
+                <option value="MANOUBA">MANOUBA</option>
+                <option value="NABEUL">NABEUL</option>
+                <option value="ZAGHOUAN">ZAGHOUAN</option>
+                <option value="BIZERTE">BIZERTE</option>
+                <option value="BEJA">BEJA</option>
+                <option value="JENDOUBA">JENDOUBA</option>
+                <option value="KEF">KEF</option>
+                <option value="SILIANA">SILIANA</option>
+                <option value="SOUSSE">SOUSSE</option>
+                <option value="MONASTIR">MONASTIR</option>
+                <option value="MAHDIA">MAHDIA</option>
+                <option value="SFAX">SFAX</option>
+                <option value="KAIROUAN">KAIROUAN</option>
+                <option value="KASSERINE">KASSERINE</option>
+                <option value="SIDI_BOUZID">SIDI_BOUZID</option>
+                <option value="GAFSA">GAFSA</option>
+                <option value="TOZEUR">TOZEUR</option>
+                <option value="KEBILI">KEBILI</option>
+                <option value="GABES">GABES</option>
+                <option value="MEDENINE">MEDENINE</option>
+                <option value="TATAOUINE">TATAOUINE</option>
+              </select>
+            </div>
+            <div class="pb-4 mb-2 simplebar-scroll-show">
+              <h3 class="h6">Type du bien</h3>
+              <ngx-simplebar style="height: 11rem;" class="overflow-auto">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="house" value="Maison" name="type_Annonce"
+                         (change)="getAllRents({typeAnnonce:'Maison'})">
+<!--                         (change)="changeProperty($event,'Maison')">-->
+                  <label class="form-check-label fs-sm" for="house">Maison</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="apartment" value="Appartment" name="type_Annonce"
+                         (change)="getAllRents({typeAnnonce:'Appartement'})">
+<!--                         (change)="changeProperty($event,'Appartement')">-->
+                  <label class="form-check-label fs-sm" for="apartment">Appartement</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="room" value="Immeuble" name="type_Annonce"
+                         (change)="getAllRents({typeAnnonce:'Immeuble'})">
+<!--                         (change)="changeProperty($event,'Immeuble')">-->
+                  <label class="form-check-label fs-sm" for="room">Immeuble</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="office" value="Local" name="type_Annonce"
+                         (change)="getAllRents({typeAnnonce:'Local'})">
+<!--                         (change)="changeProperty($event,'Local')">-->
+                  <label class="form-check-label fs-sm" for="office">Local</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="commercial" value="Terrain" name="type_Annonce"
+                         (change)="getAllRents({typeAnnonce:'Terrain'})">
+<!--                         (change)="changeProperty($event,'Terrain')">-->
+                  <label class="form-check-label fs-sm" for="commercial">Terrain</label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="daily" value="Ferme" name="type_Annonce"
+                         (change)="getAllRents({typeAnnonce:'Ferme'})">
+<!--                         (change)="changeProperty($event,'Ferme')">-->
+                  <label class="form-check-label fs-sm" for="daily">Ferme</label>
+                </div>
+              </ngx-simplebar>
+            </div>
+            <div class="pb-4 mb-2">
+              <h3 class="h6">Prix par mois en TND</h3>
+              <div class="range-slider" data-start-min="1100" data-start-max="3000" data-min="200" data-max="5000" data-step="100">
+                <div class="d-flex align-items-center">
+                  <div class="w-50 pe-2">
+                    <div class="input-group">
+                      <input class="form-control range-slider-value-min" type="number" placeholder="Prix Min" [(ngModel)]="filterCriteria.minPrice" [ngModelOptions]="{standalone:true}" (change)="getAllRents()">
+                    </div>
+                  </div>
+                  <div class="text-muted">&mdash;</div>
+                  <div class="w-50 ps-2">
+                    <div class="input-group">
+                      <input class="form-control range-slider-value-max" type="number" placeholder="Prix Max" [(ngModel)]="filterCriteria.maxPrice" [ngModelOptions]="{standalone:true}" (change)="getAllRents()">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pb-4 mb-2">
+              <h3 class="h6 pt-1">Surface en m²</h3>
+              <div class="d-flex align-items-center">
+                <input class="form-control w-100" type="number" min="20" max="500" step="10" placeholder="Surface Min" id="minValue" [(ngModel)]="filterCriteria.minArea" [ngModelOptions]="{standalone:true}" (change)="getAllRents()">
+                <div class="mx-2">&mdash;</div>
+                <input class="form-control w-100" type="number" min="20" max="500" step="10" placeholder="Surface Max" id="maxValue" [(ngModel)]="filterCriteria.maxArea" [ngModelOptions]="{standalone:true}" (change)="getAllRents()">
+              </div>
+            </div>
+            <div class="border-top py-4">
+              <button class="btn btn-outline-primary" type="reset" (click)="getAllRents(initFilterCriteria);"><i class="fi-rotate-right me-2"></i>Réinitialiser les filtres</button>
+            </div>
+          </div>
+          </form>
+        </div>
+      </aside>
+      <!-- Page content-->
+      <div class="col-lg-8 col-xl-9 position-relative overflow-hidden pb-5 pt-4 px-3 px-xl-4 px-xxl-5">
+        <!-- Breadcrumb-->
+        <app-breadcrumbs [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+        <!-- Catalog grid-->
+        <hr class="d-none d-sm-block w-100 mx-4">
+        <div class="row g-4 py-4">
+          <!-- Item-->
+          <div class="col-sm-6 col-xl-4" (click)="goToDetails(venteAnnonces.idAnnonce)" *ngFor="let venteAnnonces of annonces ">
+            <div class="card shadow-sm card-hover border-0 h-100">
+              <div class="tns-carousel-wrapper card-img-top card-img-hover"><a class="img-overlay"></a>
+
+<!--                <div class="content-overlay end-0 top-0 pt-3 pe-3">-->
+<!--                  <button class="btn btn-icon btn-light btn-xs text-primary rounded-circle" type="button"-->
+<!--                          placement="left" ngbTooltip="Add to Wishlist"><i class="fi-heart"></i></button>-->
+<!--                </div>-->
+
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide" >
+                    <img [src]="images[annonces.indexOf(venteAnnonces)]" alt="Image" class="h-100">
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-body position-relative pb-3">
+                <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">{{venteAnnonces.categorie}}</h4>
+                <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link"
+                                               routerLink="/catalog/single-v2">{{venteAnnonces.titre}}</a></h3>
+                <p class="mb-2 fs-sm text-muted">
+                  <i class="fi-map-pin ms-1 mt-n1 fs-lg text-muted"></i>
+                  {{venteAnnonces.adresse}},{{venteAnnonces.ville}},{{venteAnnonces.region}}</p>
+                <div class="fw-bold"><i class="fi-house-chosen mt-n1 me-2 lead align-middle opacity-70"></i>{{venteAnnonces.type_Annonce}}</div>
+                <div class="fw-bold"><i class="fi-minus-square mt-n1 me-2 lead align-middle opacity-70"></i>{{venteAnnonces.surface}} m²</div>
+                <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>{{venteAnnonces.prix}} TND</div>
+              </div>
+
+              <div *ngIf="venteAnnonces.type_Annonce === 'Appartement' then AutreAppartement"></div>
+              <ng-template #AutreAppartement>
+                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrChambresAppartement}}<i
+                  class="fi-bed ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+                  <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrSalleDeBainAppartement}}<i
+                    class="fi-bath ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+                </div>
+              </ng-template>
+
+              <div *ngIf="venteAnnonces.type_Annonce === 'Maison' then AutreMaison"></div>
+              <ng-template #AutreMaison>
+                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrChambresMaison}}<i
+                  class="fi-bed ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+                  <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrSalleDeBainMaison}}
+                    <i class="fi-bath ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+                </div>
+              </ng-template>
+
+              <div *ngIf="venteAnnonces.type_Annonce === 'Ferme' then AutreFerme"></div>
+              <ng-template #AutreFerme>
+                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.maisonFerme}}<i
+                  class="fi-house-chosen ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+                </div>
+              </ng-template>
+
+              <div *ngIf="venteAnnonces.type_Annonce === 'Immeuble' then AutreImmeuble"></div>
+              <ng-template #AutreImmeuble>
+                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrEtagesImmeuble}}<i
+                  class="fi-building ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+                  <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.nbrPiecesImmeuble}}<i
+                    class="fi-real-estate-house ms-1 mt-n1 fs-lg text-muted"></i>
+                </span>
+                </div>
+              </ng-template>
+
+              <div *ngIf="venteAnnonces.type_Annonce === 'Local' then AutreLocal"></div>
+              <ng-template #AutreLocal>
+                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                  <i class="fi-ticket ms-1 mt-n1 fs-lg text-muted"></i>
+                  <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.typeLocal}}
+                </span>
+                </div>
+              </ng-template>
+
+              <div *ngIf="venteAnnonces.type_Annonce === 'Terrain' then AutreTerrain"></div>
+              <ng-template #AutreTerrain>
+                <div class="card-footer d-flex align-items-center justify-content-center mx-3 pt-3 text-nowrap">
+                <span class="d-inline-block mx-1 px-2 fs-sm">{{venteAnnonces.typeTerrain}}
+                </span>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <!-- Pagination-->
+<!--        <nav class="border-top pb-md-4 pt-4 mt-2" aria-label="Pagination">-->
+<!--          <ul class="pagination mb-1">-->
+<!--            <li class="page-item d-sm-none"><span class="page-link page-link-static">1 / 5</span></li>-->
+<!--            <li class="page-item active d-none d-sm-block" aria-current="page"><span class="page-link">1<span-->
+<!--                  class="visually-hidden">(current)</span></span></li>-->
+<!--            <li class="page-item d-none d-sm-block"><a class="page-link" href="javascript:void(0);">2</a></li>-->
+<!--            <li class="page-item d-none d-sm-block"><a class="page-link" href="javascript:void(0);">3</a></li>-->
+<!--            <li class="page-item d-none d-sm-block">...</li>-->
+<!--            <li class="page-item d-none d-sm-block"><a class="page-link" href="javascript:void(0);">8</a></li>-->
+<!--            <li class="page-item"><a class="page-link" href="javascript:void(0);" aria-label="Next"><i-->
+<!--                  class="fi-chevron-right"></i></a></li>-->
+<!--          </ul>-->
+<!--        </nav>-->
+      </div>
+    </div>
+  </div>
+</main>
+<!-- Footer-->
+<app-footer></app-footer>
+
+<!-- Filters sidebar toggle button (mobile)-->
+<button class="btn btn-primary btn-sm w-100 rounded-0 fixed-bottom d-lg-none" type="button" data-bs-toggle="offcanvas"
+  data-bs-target="#filters-sidebar" (click)="FilterSidebar()"><i class="fi-filter me-2"></i>Filters</button>
+<div class="vertical-overlay" (click)="SidebarHide()"></div>

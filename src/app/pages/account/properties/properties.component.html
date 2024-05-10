@@ -1,0 +1,100 @@
+<!-- Header-->
+<app-header id="top"></app-header>
+
+<!-- Page content-->
+<div class="container pt-5 pb-lg-4 mt-5 mb-sm-2">
+  <!-- Breadcrumb-->
+  <app-breadcrumbs [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+  <!-- Page content-->
+  <div class="row">
+    <!-- Sidebar-->
+    <aside class="col-lg-4 col-md-5 pe-xl-4 mb-5">
+      <!-- Account nav-->
+      <div class="card card-body border-0 shadow-sm pb-1 me-lg-1">
+        <div class="d-flex d-md-block d-lg-flex align-items-start pt-lg-2 mb-4">
+          <div class="pt-md-2 pt-lg-0 ps-3 ps-md-0 ps-lg-3">
+            <h2 class="fs-lg mb-0">{{tokenStorage.getNom()}}</h2><span class="star-rating"></span>
+            <ul class="list-unstyled fs-sm mt-3 mb-0">
+              <li><a class="nav-link fw-normal p-0"><i class="fi-phone opacity-60 me-2"></i>(216) {{tokenStorage.getUser()['numTel']}}</a></li>
+              <li><a class="nav-link fw-normal p-0"><i class="fi-mail opacity-60 me-2"></i>{{tokenStorage.getUser()['email']}}</a></li>
+            </ul>
+          </div>
+        </div><a class="btn btn-primary btn-lg w-100 mb-3" routerLink="/account/properties"><i class="fi-plus me-2"></i>Ajouter une annonce</a><a class="btn btn-outline-secondary d-block d-md-none w-100 mb-3" href="javascript:void(0);" (click)="SideBarMenu()" data-bs-toggle="collapse"><i class="fi-align-justify me-2"></i>Menu</a>
+        <div class="collapse d-md-block mt-3" id="account-nav">
+          <div class="card-nav">
+            <a class="card-nav-link" routerLink="/account/info"><i class="fi-user opacity-60 me-2"></i>Informations personnelles</a>
+            <a class="card-nav-link active" routerLink="/account/properties"><i class="fi-home opacity-60 me-2"></i>Mes annonces</a>
+            <a class="card-nav-link" routerLink="" (click)="deconnexion()"><i class="fi-logout opacity-60 me-2"></i>Se déconnecter</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <!-- Content-->
+     <!-- Content-->
+     <div class="col-lg-8 col-md-7 mb-5">
+      <p class="pt-1 mb-4">Voici les annonces que vous avez publié sur WheelWorld</p>
+      <!-- Nav tabs-->
+      <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav nav-tabs border-bottom mb-4">
+        <li [ngbNavItem]="1" class="nav-item mb-3">
+<!--            <a ngbNavLink><i class="fi-file fs-base me-2"></i>Published</a>-->
+            <ng-template ngbNavContent>
+              <!-- Item-->
+              <div class="card card-hover card-horizontal border-0 shadow-sm mb-4" *ngFor="let mesAnnonces of annonces ">
+                <div *ngIf="tokenStorage.getUser()['idUtilisateur'] === mesAnnonces.utilisateur.idUtilisateur then mesannonces"></div>
+                <ng-template #mesannonces>
+                <a class="card-img-top" routerLink="/catalog/single-v2" style="background-image: url({{images[annonces.indexOf(mesAnnonces)]}});">
+                  <div class="position-absolute start-0 top-0 pt-3 ps-3"></div></a>
+                <div class="card-body position-relative pb-3">
+                  <div class="dropdown position-absolute zindex-5 top-0 end-0 mt-3 me-3" ngbDropdown>
+                    <button class="btn btn-icon btn-light btn-xs rounded-circle shadow-sm arrow-none" type="button" id="contextMenu11" data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle (click)="deleteAnnonce(mesAnnonces.idAnnonce)"><i class="fi-trash opacity-60 me-2"></i></button>
+<!--                    <ul class="dropdown-menu my-1 dropdown-menu-end" aria-labelledby="contextMenu1" ngbDropdownMenu>-->
+<!--                      <li>-->
+<!--                        <button class="dropdown-item" type="button"><i class="fi-trash opacity-60 me-2"></i>Supprimer</button>-->
+<!--                      </li>-->
+<!--                    </ul>-->
+                  </div>
+                  <h4 class="mb-1 fs-xs fw-normal text-uppercase text-primary">{{mesAnnonces.categorie}}</h4>
+                  <h3 class="h6 mb-2 fs-base"><a class="nav-link stretched-link" routerLink="/catalog/single-v2">{{mesAnnonces.titre}}</a></h3>
+                  <div class="fw-bold"><i class="fi-house-chosen mt-n1 me-2 lead align-middle opacity-70"></i>{{mesAnnonces.type_Annonce}}</div>
+                  <p class="mb-2 fs-sm text-muted">{{mesAnnonces.adresse}},{{mesAnnonces.ville}},{{mesAnnonces.region}}</p>
+                  <div class="fw-bold"><i class="fi-cash mt-n1 me-2 lead align-middle opacity-70"></i>{{mesAnnonces.prix}} TND</div>
+                  <div class="fw-bold"><i class="fi-minus-square mt-n1 me-2 lead align-middle opacity-70"></i>{{mesAnnonces.surface}} m²</div>
+                  <div *ngIf="mesAnnonces.type_Annonce === 'Appartement' then AutreAppartement"></div>
+                  <ng-template #AutreAppartement>
+                    <div class="d-flex align-items-center justify-content-center justify-content-sm-start border-top pt-3 pb-2 mt-3 text-nowrap"><span class="d-inline-block me-4 fs-sm">{{mesAnnonces.nbrChambresAppartement}}<i class="fi-bed ms-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block me-4 fs-sm">{{mesAnnonces.nbrChambresAppartement}}<i class="fi-bath ms-1 mt-n1 fs-lg text-muted"></i></span></div>
+                  </ng-template>
+                  <div *ngIf="mesAnnonces.type_Annonce === 'Maison' then AutreMaison"></div>
+                  <ng-template #AutreMaison>
+                    <div class="d-flex align-items-center justify-content-center justify-content-sm-start border-top pt-3 pb-2 mt-3 text-nowrap"><span class="d-inline-block me-4 fs-sm">{{mesAnnonces.nbrChambresMaison}}<i class="fi-bed ms-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block me-4 fs-sm">{{mesAnnonces.nbrSalleDeBainMaison}}<i class="fi-bath ms-1 mt-n1 fs-lg text-muted"></i></span></div>
+                  </ng-template>
+                  <div *ngIf="mesAnnonces.type_Annonce === 'Ferme' then AutreFerme"></div>
+                  <ng-template #AutreFerme>
+                    <div class="d-flex align-items-center justify-content-center justify-content-sm-start border-top pt-3 pb-2 mt-3 text-nowrap"><span class="d-inline-block me-4 fs-sm">{{mesAnnonces.maisonFerme}}<i class="fi-house-chosen ms-1 mt-n1 fs-lg text-muted"></i></span></div>
+                  </ng-template>
+                  <div *ngIf="mesAnnonces.type_Annonce === 'Immeuble' then AutreImmeuble"></div>
+                  <ng-template #AutreImmeuble>
+                    <div class="d-flex align-items-center justify-content-center justify-content-sm-start border-top pt-3 pb-2 mt-3 text-nowrap"><span class="d-inline-block me-4 fs-sm">{{mesAnnonces.nbrEtagesImmeuble}}<i class="fi-building ms-1 mt-n1 fs-lg text-muted"></i></span><span class="d-inline-block me-4 fs-sm">{{mesAnnonces.nbrPiecesImmeuble}}<i class="fi-bath ms-1 mt-n1 fs-lg text-muted"></i></span></div>
+                  </ng-template>
+                  <div *ngIf="mesAnnonces.type_Annonce === 'Local' then AutreLocal"></div>
+                  <ng-template #AutreLocal>
+                    <div class="d-flex align-items-center justify-content-center justify-content-sm-start border-top pt-3 pb-2 mt-3 text-nowrap"><span class="d-inline-block me-4 fs-sm">{{mesAnnonces.typeLocal}}<i class="fi-house-chosen ms-1 mt-n1 fs-lg text-muted"></i></span></div>
+                  </ng-template>
+                  <div *ngIf="mesAnnonces.type_Annonce === 'Terrain' then AutreTerrain"></div>
+                  <ng-template #AutreTerrain>
+                    <div class="d-flex align-items-center justify-content-center justify-content-sm-start border-top pt-3 pb-2 mt-3 text-nowrap"><span class="d-inline-block me-4 fs-sm">{{mesAnnonces.typeTerrain}}</span></div>
+                  </ng-template>
+                </div>
+            </ng-template>
+              </div>
+            </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="nav"></div>
+    </div>
+
+</div>
+</div>
+
+  <!-- Footer-->
+  <app-footer></app-footer>
